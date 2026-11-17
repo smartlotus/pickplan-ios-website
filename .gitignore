@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+video-studio/node_modules/
+video-studio/tmp/
+.wrangler/
+dist/

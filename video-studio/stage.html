@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Pickplan iOS Liquid Glass — Product Film Stage (1920x1080@60)</title>
+<style>
+  :root {
+    --paper: #F7F7F2;
+    --obsidian: #050506;
+    --ink: #141414;
+    --white: #FFFFFF;
+    --coral: #CF6679;
+    --mint: #8FE3B0;
+    --glass-bg: rgba(255, 255, 255, 0.085);
+    --glass-border: rgba(255, 255, 255, 0.22);
+    --font-sans: "SF Pro Display", -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    --font-mono: "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    background: var(--obsidian);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    color: var(--white);
+  }
+  .stage {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+  }
+  .act {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity, transform;
+  }
+
+  /* Ambient pearl light orbs on dark obsidian */
+  .ambient-obsidian {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 18% 20%, rgba(255,255,255,0.12), transparent 44%),
+                radial-gradient(circle at 82% 78%, rgba(215,220,232,0.10), transparent 48%),
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.04), transparent 65%),
+                #050506;
+  }
+  .ambient-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+    background-size: 36px 36px;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.8) 25%, transparent 78%);
+    opacity: 0.35;
+  }
+
+  /* Liquid Glass shared card styling */
+  .glass-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 55%, rgba(255,255,255,0.09) 100%);
+    backdrop-filter: blur(26px) saturate(165%);
+    -webkit-backdrop-filter: blur(26px) saturate(165%);
+    border: 1px solid rgba(255,255,255,0.22);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.34), inset 0 -1px 0 rgba(255,255,255,0.06), 0 28px 64px -20px rgba(0,0,0,0.75);
+  }
+  .glass-pill {
+    background: linear-gradient(160deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06));
+    backdrop-filter: blur(22px) saturate(170%);
+    border: 1px solid rgba(255,255,255,0.26);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 18px 40px rgba(0,0,0,0.5);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    letter-spacing: 3.4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.62);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eyebrow .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #fff;
+    display: inline-block;
+  }
+
+  /* ================= ACT 1: Editorial Paper ================= */
+  .act-1 {
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .paper-grid {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to right, rgba(20,20,20,0.045) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(20,20,20,0.045) 1px, transparent 1px);
+    background-size: 96px 96px;
+  }
+  .act1-center {
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    z-index: 2;
+  }
+  .act1-logo {
+    width: 148px;
+    height: 148px;
+    border-radius: 36px;
+    overflow: hidden;
+    box-shadow: 0 28px 60px -18px rgba(0,0,0,0.28), 0 0 0 1px rgba(0,0,0,0.08);
+    background: #000;
+  }
+  .act1-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .act1-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    letter-spacing: 3.8px;
+    color: #5b5c55;
+  }
+  .act1-title {
+    font-size: 104px;
+    font-weight: 800;
+    letter-spacing: -3px;
+    line-height: 1.15;
+    color: #141414;
+  }
+  .plain-wrap {
+    position: relative;
+    display: inline-block;
+  }
+  .plain-underline {
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    bottom: -14px;
+    width: calc(100% + 12px);
+    height: 26px;
+    overflow: visible;
+  }
+  .act1-sub {
+    font-size: 28px;
+    color: #5d5e57;
+    letter-spacing: 0.4px;
+    margin-top: 8px;
+  }
+  .iris-mask {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2400px;
+    height: 2400px;
+    margin-left: -1200px;
+    margin-top: -1200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #0b0b0e 0%, #050506 72%);
+    box-shadow: inset 0 0 60px rgba(255,255,255,0.24);
+    transform: scale(0);
+    z-index: 5;
+  }
+
+  /* ================= ACT 2: iPhone Liquid Glass ================= */
+  .act2-layout {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 640px;
+    align-items: center;
+    padding: 0 130px;
+    gap: 60px;
+  }
+  .act-copy h2 {
+    font-size: 78px;
+    font-weight: 800;
+    letter-spacing: -2.2px;
+    line-height: 1.14;
+    margin: 22px 0 26px;
+  }
+  .act-copy p {
+    font-size: 27px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.68);
+    max-width: 720px;
+  }
+  .feature-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 38px;
+  }
+  .feature-chip {
+    padding: 13px 22px;
+    border-radius: 999px;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.92);
+  }
+  .iphone-shell {
+    width: 446px;
+    height: 896px;
+    border-radius: 62px;
+    padding: 16px;
+    background: linear-gradient(145deg, #2b2b30, #121215 45%, #242429);
+    box-shadow: 0 48px 110px rgba(0,0,0,0.88), inset 0 0 0 2px rgba(255,255,255,0.18);
+    position: relative;
+    margin: 0 auto;
+  }
+  .iphone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 48px;
+    background: radial-gradient(circle at 22% 16%, rgba(255,255,255,0.14), transparent 44%),
+                radial-gradient(circle at 80% 76%, rgba(210,220,240,0.10), transparent 48%),
+                #060608;
+    position: relative;
+    overflow: hidden;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .dynamic-island {
+    width: 126px;
+    height: 34px;
+    border-radius: 999px;
+    background: #000;
+    margin: 2px auto 18px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .ios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .ios-header h3 { font-size: 28px; font-weight: 750; letter-spacing: -0.6px; }
+  .ios-badge {
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .ios-progress-track {
+    height: 4px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.14);
+    margin-bottom: 22px;
+    overflow: hidden;
+  }
+  .ios-progress-fill {
+    height: 100%;
+    background: #fff;
+    border-radius: 99px;
+  }
+  .ios-section-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.58);
+    margin: 6px 4px 12px;
+  }
+  .todo-card {
+    border-radius: 22px;
+    padding: 18px 18px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    overflow: hidden;
+  }
+  .todo-check {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    border: 1.8px solid rgba(255,255,255,0.65);
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    font-weight: 800;
+    color: #050506;
+    flex-shrink: 0;
+  }
+  .todo-check.checked {
+    background: #fff;
+    border-color: #fff;
+  }
+  .todo-meta { flex: 1; }
+  .todo-title { font-size: 18px; font-weight: 650; }
+  .todo-sub { font-size: 13px; color: rgba(255,255,255,0.58); margin-top: 5px; }
+  .todo-sub.deadline { color: var(--coral); }
+  .undo-toast {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 112px;
+    border-radius: 999px;
+    padding: 13px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .undo-btn {
+    background: #fff;
+    color: #050506;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .glass-dock {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 22px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dock-capsule {
+    flex: 1;
+    height: 68px;
+    border-radius: 999px;
+    padding: 6px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    position: relative;
+  }
+  .dock-active-pill {
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 6px;
+    width: calc(33.333% - 4px);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.36);
+  }
+  .dock-item {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.68);
+  }
+  .dock-item.active { color: #fff; }
+  .dock-fab {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 32px;
+    font-weight: 300;
+    color: #fff;
+  }
+  .touch-ripple {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.8);
+    background: rgba(255,255,255,0.24);
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+
+  /* ================= ACT 3: Plain Words AI ================= */
+  .act3-wrap {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 96px 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+  }
+  .act3-head h2 {
+    font-size: 68px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin: 18px 0 12px;
+  }
+  .act3-head p {
+    font-size: 25px;
+    color: rgba(255,255,255,0.64);
+  }
+  .prompt-bar {
+    border-radius: 28px;
+    padding: 28px 34px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .prompt-text {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
+  }
+  .caret {
+    display: inline-block;
+    width: 3px;
+    height: 30px;
+    background: #fff;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .shimmer-sweep {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 220px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transform: skewX(-18deg);
+  }
+  .draft-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .draft-card {
+    border-radius: 28px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .draft-tag {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.58);
+  }
+  .draft-card h4 { font-size: 28px; font-weight: 750; }
+  .draft-time { font-size: 17px; color: rgba(255,255,255,0.72); }
+  .draft-time.coral { color: var(--coral); }
+  .add-all-pill {
+    align-self: flex-start;
+    padding: 18px 36px;
+    border-radius: 999px;
+    font-size: 21px;
+    font-weight: 750;
+  }
+
+  /* ================= ACT 4: iPad 3-Column + iPhone ================= */
+  .act4-wrap {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 72px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .act4-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .act4-top h2 {
+    font-size: 62px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-top: 14px;
+  }
+  .kbd-row { display: flex; gap: 12px; }
+  .kbd {
+    padding: 10px 18px;
+    border-radius: 14px;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .devices-stage {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 44px;
+    flex: 1;
+    padding-top: 24px;
+  }
+  .ipad-shell {
+    width: 1180px;
+    height: 690px;
+    border-radius: 42px;
+    padding: 18px;
+    background: linear-gradient(145deg, #2b2b30, #111114);
+    box-shadow: 0 50px 120px rgba(0,0,0,0.85), inset 0 0 0 2px rgba(255,255,255,0.18);
+  }
+  .ipad-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 28px;
+    background: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.12), transparent 45%), #060608;
+    display: grid;
+    grid-template-columns: 270px 1fr 340px;
+    gap: 16px;
+    padding: 18px;
+  }
+  .ipad-col {
+    border-radius: 22px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ipad-nav-item {
+    padding: 12px 14px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.72);
+  }
+  .ipad-nav-item.active {
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+  }
+  .focus-ring-wrap {
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .focus-clock {
+    font-family: var(--font-mono);
+    font-size: 46px;
+    font-weight: 700;
+    letter-spacing: -1px;
+  }
+
+  /* ================= ACT 5: Data Vault & Auto-Backup ================= */
+  .act5-wrap {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 88px 130px;
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .vault-ring-card {
+    border-radius: 36px;
+    padding: 46px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    text-align: center;
+  }
+  .vault-stats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .vault-stat {
+    border-radius: 18px;
+    padding: 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+  .vault-stat strong { display: block; font-size: 26px; font-weight: 750; }
+  .vault-stat span { font-size: 13px; color: rgba(255,255,255,0.58); }
+  .act5-right h2 {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin: 16px 0 26px;
+    line-height: 1.15;
+  }
+  .snapshot-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .snapshot-row {
+    border-radius: 22px;
+    padding: 20px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .snap-name { font-family: var(--font-mono); font-size: 18px; font-weight: 600; }
+  .snap-meta { font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .snap-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.28);
+  }
+
+  /* ================= ACT 6: Finale ================= */
+  .act6-center {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 24px;
+  }
+  .act6-logo {
+    width: 136px;
+    height: 136px;
+    border-radius: 34px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.28);
+    box-shadow: 0 32px 80px rgba(255,255,255,0.12);
+  }
+  .act6-logo img { width: 100%; height: 100%; object-fit: cover; }
+  .act6-wordmark {
+    font-size: 96px;
+    font-weight: 850;
+    letter-spacing: -3.5px;
+  }
+  .act6-tagline {
+    font-size: 32px;
+    color: rgba(255,255,255,0.78);
+    letter-spacing: 0.4px;
+  }
+  .act6-badges {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="ambient-obsidian"></div>
+  <div class="ambient-grid"></div>
+
+  <!-- ACT 1: Editorial Paper -->
+  <section class="act act-1" id="act1">
+    <div class="paper-grid"></div>
+    <div class="act1-center" id="act1-center">
+      <div class="act1-logo"><img src="../site/assets/pickplanlogo.jpg" alt="Pickplan"></div>
+      <div class="act1-eyebrow">01 / YOUR PLANS. IN PLAIN WORDS.</div>
+      <h1 class="act1-title">
+        做计划，说<span class="plain-wrap">大白话
+          <svg class="plain-underline" viewBox="0 0 340 26">
+            <path id="act1-stroke1" d="M4 16 Q140 -4 336 10" fill="none" stroke="#141414" stroke-width="5" stroke-linecap="round" stroke-dasharray="360" stroke-dashoffset="360"/>
+            <path id="act1-stroke2" d="M42 24 Q165 11 292 18" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="280" stroke-dashoffset="280"/>
+          </svg>
+        </span>。
+      </h1>
+      <p class="act1-sub">如今凝成 iOS 26 液态玻璃 · 为 iPhone 与 iPad 零费用打造</p>
+    </div>
+    <div class="iris-mask" id="act1-iris"></div>
+  </section>
+
+  <!-- ACT 2: Liquid Glass iPhone -->
+  <section class="act" id="act2">
+    <div class="act2-layout">
+      <div class="act-copy" id="act2-copy">
+        <span class="eyebrow"><span class="dot"></span> 02 / iOS 26 LIQUID GLASS</span>
+        <h2>黑白极简，<br>折射出真实呼吸。</h2>
+        <p>保留 Android 原版高对比纯黑哲学，升级为原生 <code>GlassEffectContainer</code> 悬浮胶囊栏、实时折射卡片与触感弹簧反馈。</p>
+        <div class="feature-chips">
+          <span class="feature-chip glass-pill">GlassEffectContainer 形变导航</span>
+          <span class="feature-chip glass-pill">滑动完成 / 6秒玻璃撤销</span>
+          <span class="feature-chip glass-pill">6 大智能时间分组</span>
+        </div>
+      </div>
+
+      <div class="iphone-shell" id="act2-phone">
+        <div class="iphone-screen">
+          <div class="dynamic-island"></div>
+          <div class="ios-header">
+            <h3>Pickplan</h3>
+            <span class="ios-badge glass-pill" id="act2-progress-label">1 / 3 完成</span>
+          </div>
+          <div class="ios-progress-track">
+            <div class="ios-progress-fill" id="act2-progress-fill" style="width: 33%"></div>
+          </div>
+          <div class="ios-section-label">☀ 今天 · TODAY</div>
+          <div class="todo-card glass-card">
+            <div class="todo-check checked">✓</div>
+            <div class="todo-meta">
+              <div class="todo-title" style="text-decoration: line-through; color: rgba(255,255,255,0.5)">早上买新鲜蔬果与咖啡豆</div>
+              <div class="todo-sub">提醒 09:00 · 生活</div>
+            </div>
+          </div>
+          <div class="todo-card glass-card" id="act2-task2">
+            <div class="todo-check" id="act2-check2"></div>
+            <div class="todo-meta">
+              <div class="todo-title" id="act2-title2">评审 iOS 液态玻璃原型动效</div>
+              <div class="todo-sub">提醒 15:00 · 工作 · 高优先</div>
+            </div>
+            <div class="touch-ripple" id="act2-ripple" style="left: 31px; top: 41px;"></div>
+          </div>
+          <div class="todo-card glass-card" id="act2-task3">
+            <div class="todo-check"></div>
+            <div class="todo-meta">
+              <div class="todo-title">周五前提交季度设计总结</div>
+              <div class="todo-sub deadline">截止 周五 18:00 · 工作</div>
+            </div>
+          </div>
+          <div class="undo-toast glass-pill" id="act2-undo" style="opacity: 0; transform: translateY(18px);">
+            <span>已删除「旧日程」</span>
+            <span class="undo-btn">撤销 Undo</span>
+          </div>
+          <div class="glass-dock">
+            <div class="dock-capsule glass-pill">
+              <div class="dock-active-pill" id="act2-dock-pill"></div>
+              <div class="dock-item active" id="act2-tab0">自己做</div>
+              <div class="dock-item" id="act2-tab1">AI 帮做</div>
+              <div class="dock-item" id="act2-tab2">数据金库</div>
+            </div>
+            <div class="dock-fab glass-pill" id="act2-fab">＋</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 3: Plain Words AI -->
+  <section class="act" id="act3">
+    <div class="act3-wrap">
+      <div class="act3-head">
+        <span class="eyebrow"><span class="dot"></span> 03 / PLAIN WORDS -> STRUCTURED DRAFTS</span>
+        <h2>一段大白话，拆成多件清晰的计划。</h2>
+        <p>兼容 DeepSeek / Kimi / Qwen / GLM / SiliconFlow / OpenAI · 断网亦有内置本地解析引擎</p>
+      </div>
+      <div class="prompt-bar glass-card">
+        <div class="prompt-text"><span id="act3-typed"></span><span class="caret" id="act3-caret"></span></div>
+        <span class="ios-badge glass-pill">✦ 离线 &amp; BYOK 双引擎</span>
+        <div class="shimmer-sweep" id="act3-shimmer" style="left: -260px;"></div>
+      </div>
+      <div class="draft-grid">
+        <div class="draft-card glass-card" id="act3-d1">
+          <span class="draft-tag">DRAFT 01 · 工作</span>
+          <h4>评审新版交互设计</h4>
+          <p class="draft-time">◷ 明天 10:00 提醒</p>
+        </div>
+        <div class="draft-card glass-card" id="act3-d2">
+          <span class="draft-tag">DRAFT 02 · 工作</span>
+          <h4>给重点客户回电沟通</h4>
+          <p class="draft-time">◷ 明天 15:00 提醒</p>
+        </div>
+        <div class="draft-card glass-card" id="act3-d3">
+          <span class="draft-tag">DRAFT 03 · 截止</span>
+          <h4>提交本周复盘报告</h4>
+          <p class="draft-time coral">⚑ 周五 18:00 截止</p>
+        </div>
+      </div>
+      <div class="add-all-pill glass-pill" id="act3-cta">全部加入计划 ＋</div>
+    </div>
+  </section>
+
+  <!-- ACT 4: iPad + iPhone Adaptive -->
+  <section class="act" id="act4">
+    <div class="act4-wrap">
+      <div class="act4-top">
+        <div>
+          <span class="eyebrow"><span class="dot"></span> 04 / BUILT FOR IPHONE &amp; IPAD</span>
+          <h2>iPhone 单手灵动，iPad 三栏高效。</h2>
+        </div>
+        <div class="kbd-row">
+          <span class="kbd glass-pill">⌘N 新建</span>
+          <span class="kbd glass-pill">⌘F 搜索</span>
+          <span class="kbd glass-pill">⌘B 立即备份</span>
+        </div>
+      </div>
+      <div class="devices-stage">
+        <div class="ipad-shell" id="act4-ipad">
+          <div class="ipad-screen">
+            <div class="ipad-col glass-card">
+              <div style="font-weight: 800; font-size: 20px; margin-bottom: 10px;">Pickplan</div>
+              <div class="ipad-nav-item active"><span>今天 Today</span><span>3</span></div>
+              <div class="ipad-nav-item"><span>明天 Tomorrow</span><span>2</span></div>
+              <div class="ipad-nav-item"><span>AI 帮做</span><span>✦</span></div>
+              <div class="ipad-nav-item"><span>数据金库 Vault</span><span>✓</span></div>
+              <div style="margin-top: auto; font-size: 13px; color: rgba(255,255,255,0.58);">自动备份：每 24 小时<br>上次快照：刚刚</div>
+            </div>
+            <div class="ipad-col glass-card">
+              <div style="font-size: 14px; color: rgba(255,255,255,0.58); font-weight: 700;">☀ 今天待办</div>
+              <div class="todo-card glass-card" style="margin-bottom: 4px; padding: 14px;">
+                <div class="todo-check checked">✓</div>
+                <div class="todo-meta"><div class="todo-title" style="font-size: 16px;">早上买新鲜蔬果</div></div>
+              </div>
+              <div class="todo-card glass-card" style="margin-bottom: 4px; padding: 14px; border-color: rgba(255,255,255,0.45);">
+                <div class="todo-check"></div>
+                <div class="todo-meta"><div class="todo-title" style="font-size: 16px;">评审 iOS 液态玻璃原型</div><div class="todo-sub">进行中 · 专注计时</div></div>
+              </div>
+              <div class="todo-card glass-card" style="margin-bottom: 4px; padding: 14px;">
+                <div class="todo-check"></div>
+                <div class="todo-meta"><div class="todo-title" style="font-size: 16px;">提交季度设计总结</div><div class="todo-sub deadline">截止 周五 18:00</div></div>
+              </div>
+            </div>
+            <div class="ipad-col glass-card">
+              <div style="font-size: 14px; color: rgba(255,255,255,0.58); font-weight: 700;">专注计时 · FOCUS</div>
+              <div class="focus-ring-wrap">
+                <svg width="190" height="190" viewBox="0 0 190 190">
+                  <circle cx="95" cy="95" r="80" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="8"/>
+                  <circle id="act4-ring" cx="95" cy="95" r="80" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" transform="rotate(-90 95 95)" stroke-dasharray="502.6" stroke-dashoffset="160"/>
+                </svg>
+                <div class="focus-clock" id="act4-clock">24:59</div>
+                <div style="font-size: 15px; color: rgba(255,255,255,0.72);">评审 iOS 液态玻璃原型</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="iphone-shell" style="width: 310px; height: 630px; border-radius: 48px; padding: 12px; margin: 0; transform: translateY(-10px);">
+          <div class="iphone-screen" style="border-radius: 38px; padding: 16px 14px;">
+            <div class="dynamic-island" style="width: 90px; height: 24px; margin-bottom: 12px;"></div>
+            <div class="ios-header" style="margin-bottom: 12px;">
+              <h3 style="font-size: 20px;">Pickplan</h3>
+              <span class="ios-badge glass-pill" style="font-size: 11px; padding: 4px 10px;">同步中</span>
+            </div>
+            <div class="todo-card glass-card" style="padding: 12px; border-radius: 16px; margin-bottom: 10px;">
+              <div class="todo-check checked" style="width: 20px; height: 20px; font-size: 12px;">✓</div>
+              <div class="todo-meta"><div class="todo-title" style="font-size: 13px;">早上买新鲜蔬果</div></div>
+            </div>
+            <div class="todo-card glass-card" style="padding: 12px; border-radius: 16px; margin-bottom: 10px; border-color: rgba(255,255,255,0.45);">
+              <div class="todo-check" style="width: 20px; height: 20px;"></div>
+              <div class="todo-meta">
+                <div class="todo-title" style="font-size: 13px;">评审 iOS 液态玻璃原型</div>
+                <div class="todo-sub" style="font-size: 11px;">专注 24:55</div>
+              </div>
+            </div>
+            <div class="glass-dock" style="left: 12px; right: 12px; bottom: 14px; height: 50px;">
+              <div class="dock-capsule glass-pill" style="height: 48px; font-size: 10px;">
+                <div class="dock-active-pill"></div>
+                <div class="dock-item active" style="font-size: 10px;">自己做</div>
+                <div class="dock-item" style="font-size: 10px;">AI</div>
+                <div class="dock-item" style="font-size: 10px;">金库</div>
+              </div>
+              <div class="dock-fab glass-pill" style="width: 48px; height: 48px; font-size: 22px;">＋</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 5: Local Data Vault -->
+  <section class="act" id="act5">
+    <div class="act5-wrap">
+      <div class="vault-ring-card glass-card">
+        <svg width="240" height="240" viewBox="0 0 240 240">
+          <circle cx="120" cy="120" r="96" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="18"/>
+          <circle id="act5-arc1" cx="120" cy="120" r="96" fill="none" stroke="#FFFFFF" stroke-width="18" stroke-linecap="round" transform="rotate(-90 120 120)" stroke-dasharray="603" stroke-dashoffset="603"/>
+          <circle id="act5-arc2" cx="120" cy="120" r="96" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="18" stroke-linecap="round" transform="rotate(95 120 120)" stroke-dasharray="603" stroke-dashoffset="603"/>
+        </svg>
+        <div>
+          <div style="font-size: 40px; font-weight: 800;">160 KB</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.62); margin-top: 4px;">全部数据完全保存在本机 · SHA256 校验</div>
+        </div>
+        <div class="vault-stats">
+          <div class="vault-stat"><strong>v1 + v2</strong><span>Android 无损导入</span></div>
+          <div class="vault-stat"><strong>15 份</strong><span>智能轮转快照</span></div>
+        </div>
+      </div>
+      <div class="act5-right">
+        <span class="eyebrow"><span class="dot"></span> 05 / LOCAL DATA SOVEREIGNTY</span>
+        <h2>本地导入导出、<br>定时备份与数据管理。</h2>
+        <div class="snapshot-list">
+          <div class="snapshot-row glass-card" id="act5-s1">
+            <div>
+              <div class="snap-name">PickPlan-auto-20261117.pickplan.json</div>
+              <div class="snap-meta">定时自动快照 · 14 项任务 · 已校验</div>
+            </div>
+            <span class="snap-badge">Files 文件夹可见</span>
+          </div>
+          <div class="snapshot-row glass-card" id="act5-s2">
+            <div>
+              <div class="snap-name">PickPlan-safety-pre-restore.pickplan.json</div>
+              <div class="snap-meta">置顶保护 · 覆盖前自动建立回滚点</div>
+            </div>
+            <span class="snap-badge">PINNED · 置顶保护</span>
+          </div>
+          <div class="snapshot-row glass-card" id="act5-s3">
+            <div>
+              <div class="snap-name">支持：智能合并 / 追加导入 / Markdown 导出</div>
+              <div class="snap-meta">无服务器、无账号、彻底由你掌控</div>
+            </div>
+            <span class="snap-badge">零云端依赖</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACT 6: Finale -->
+  <section class="act" id="act6">
+    <div class="act6-center">
+      <div class="act6-logo"><img src="../site/assets/pickplanlogo.jpg" alt="Pickplan"></div>
+      <div class="act6-wordmark">PICKPLAN</div>
+      <div class="act6-tagline">做计划，说大白话 · iOS &amp; iPadOS 液态玻璃版</div>
+      <div class="act6-badges">
+        <span class="feature-chip glass-pill">Safari 独立 Web App</span>
+        <span class="feature-chip glass-pill">SideStore 免签侧载</span>
+        <span class="feature-chip glass-pill">Xcode 免费 Apple ID</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, s, e) => clamp((t - s) / Math.max(0.0001, e - s));
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const easeInOut = x => {
+  const c = clamp(x);
+  return c < 0.5 ? 4 * c * c * c : 1 - Math.pow(-2 * c + 2, 3) / 2;
+};
+
+const PROMPT_STR = "明天上午十点评审设计，下午三点回电客户，周五前交报告";
+
+window.renderAtTime = function(t) {
+  const act1 = document.getElementById('act1');
+  const act2 = document.getElementById('act2');
+  const act3 = document.getElementById('act3');
+  const act4 = document.getElementById('act4');
+  const act5 = document.getElementById('act5');
+  const act6 = document.getElementById('act6');
+
+  // Act opacities
+  act1.style.opacity = t < 6.2 ? 1 : 0;
+  act2.style.opacity = (t >= 5.6 && t <= 13.4) ? Math.min(easeOut(prog(t, 5.6, 6.4)), 1 - easeInOut(prog(t, 12.6, 13.4))) : 0;
+  act3.style.opacity = (t >= 12.8 && t <= 20.4) ? Math.min(easeOut(prog(t, 12.8, 13.5)), 1 - easeInOut(prog(t, 19.6, 20.4))) : 0;
+  act4.style.opacity = (t >= 19.8 && t <= 26.4) ? Math.min(easeOut(prog(t, 19.8, 20.5)), 1 - easeInOut(prog(t, 25.6, 26.4))) : 0;
+  act5.style.opacity = (t >= 25.8 && t <= 32.4) ? Math.min(easeOut(prog(t, 25.8, 26.5)), 1 - easeInOut(prog(t, 31.6, 32.4))) : 0;
+  act6.style.opacity = t >= 31.8 ? easeOut(prog(t, 31.8, 32.6)) : 0;
+
+  // Act 1 animations
+  if (t < 6.4) {
+    const pIn = easeOut(prog(t, 0.0, 1.2));
+    document.getElementById('act1-center').style.transform = `translateY(${(1 - pIn) * 32}px) scale(${0.94 + pIn * 0.06})`;
+    document.getElementById('act1-center').style.opacity = pIn;
+    const s1 = easeInOut(prog(t, 1.6, 2.7));
+    const s2 = easeInOut(prog(t, 2.2, 3.2));
+    document.getElementById('act1-stroke1').style.strokeDashoffset = (360 * (1 - s1)).toFixed(1);
+    document.getElementById('act1-stroke2').style.strokeDashoffset = (280 * (1 - s2)).toFixed(1);
+    const iris = easeInOut(prog(t, 4.9, 6.0));
+    document.getElementById('act1-iris').style.transform = `scale(${iris * 1.12})`;
+  }
+
+  // Act 2 animations
+  if (t >= 5.5 && t <= 13.5) {
+    const pPhone = easeOut(prog(t, 5.8, 6.9));
+    document.getElementById('act2-phone').style.transform = `translateY(${(1 - pPhone) * 70}px) scale(${0.92 + pPhone * 0.08})`;
+    const pCopy = easeOut(prog(t, 6.0, 7.1));
+    document.getElementById('act2-copy').style.transform = `translateX(${(1 - pCopy) * -40}px)`;
+
+    // Check task 2 at t=8.15
+    const checked = t >= 8.15;
+    const checkEl = document.getElementById('act2-check2');
+    const titleEl = document.getElementById('act2-title2');
+    if (checked) {
+      checkEl.classList.add('checked');
+      checkEl.textContent = '✓';
+      titleEl.style.textDecoration = 'line-through';
+      titleEl.style.color = 'rgba(255,255,255,0.5)';
+      document.getElementById('act2-progress-label').textContent = '2 / 3 完成';
+      document.getElementById('act2-progress-fill').style.width = '66%';
+    } else {
+      checkEl.classList.remove('checked');
+      checkEl.textContent = '';
+      titleEl.style.textDecoration = 'none';
+      titleEl.style.color = '#fff';
+      document.getElementById('act2-progress-label').textContent = '1 / 3 完成';
+      document.getElementById('act2-progress-fill').style.width = '33%';
+    }
+    const rippleP = prog(t, 8.05, 8.75);
+    const rippleEl = document.getElementById('act2-ripple');
+    rippleEl.style.opacity = rippleP > 0 && rippleP < 1 ? (1 - rippleP) * 0.85 : 0;
+    rippleEl.style.transform = `translate(-50%, -50%) scale(${0.3 + rippleP * 1.4})`;
+
+    // Undo toast at t=9.75..12.2
+    const undoIn = easeOut(prog(t, 9.75, 10.25));
+    const undoOut = 1 - easeInOut(prog(t, 11.7, 12.2));
+    const undoOp = t < 9.75 ? 0 : Math.min(undoIn, undoOut);
+    const undoEl = document.getElementById('act2-undo');
+    undoEl.style.opacity = undoOp;
+    undoEl.style.transform = `translateY(${(1 - undoOp) * 18}px)`;
+
+    // Morph dock indicator at t=11.0..12.3
+    const dockShift = easeInOut(prog(t, 11.0, 11.6)) * 100 - easeInOut(prog(t, 12.0, 12.6)) * 100;
+    document.getElementById('act2-dock-pill').style.transform = `translateX(${dockShift}%)`;
+    const fabScale = 1 + 0.14 * Math.sin(prog(t, 11.2, 11.8) * Math.PI);
+    document.getElementById('act2-fab').style.transform = `scale(${fabScale})`;
+  }
+
+  // Act 3 animations
+  if (t >= 12.8 && t <= 20.5) {
+    const typeP = prog(t, 13.3, 15.8);
+    const chars = Math.floor(typeP * PROMPT_STR.length);
+    document.getElementById('act3-typed').textContent = PROMPT_STR.slice(0, chars);
+    document.getElementById('act3-caret').style.opacity = (t % 0.6) < 0.35 ? 1 : 0.15;
+
+    const sweep = prog(t, 15.85, 16.55);
+    document.getElementById('act3-shimmer').style.left = `${-260 + sweep * 2100}px`;
+
+    const d1 = easeOut(prog(t, 16.25, 16.95));
+    const d2 = easeOut(prog(t, 16.95, 17.65));
+    const d3 = easeOut(prog(t, 17.65, 18.35));
+    [ ['act3-d1', d1], ['act3-d2', d2], ['act3-d3', d3] ].forEach(([id, v]) => {
+      const el = document.getElementById(id);
+      el.style.opacity = v;
+      el.style.transform = `translateY(${(1 - v) * 38}px) scale(${0.95 + v * 0.05})`;
+    });
+
+    const ctaAdded = t >= 18.85;
+    const ctaEl = document.getElementById('act3-cta');
+    if (ctaAdded) {
+      ctaEl.style.background = '#FFFFFF';
+      ctaEl.style.color = '#050506';
+      ctaEl.textContent = '已加入 3 个任务 ✓';
+    } else {
+      ctaEl.style.background = '';
+      ctaEl.style.color = '#FFFFFF';
+      ctaEl.textContent = '全部加入计划 ＋';
+    }
+  }
+
+  // Act 4 animations
+  if (t >= 19.8 && t <= 26.5) {
+    const pPad = easeOut(prog(t, 20.0, 21.0));
+    document.getElementById('act4-ipad').style.transform = `translateY(${(1 - pPad) * 44}px) scale(${0.95 + pPad * 0.05})`;
+    const secsLeft = Math.max(0, 59 - Math.floor(prog(t, 20.5, 25.8) * 12));
+    document.getElementById('act4-clock').textContent = `24:${String(secsLeft).padStart(2, '0')}`;
+    document.getElementById('act4-ring').style.strokeDashoffset = (160 - prog(t, 20.5, 25.8) * 85).toFixed(1);
+  }
+
+  // Act 5 animations
+  if (t >= 25.8 && t <= 32.5) {
+    const a1 = easeOut(prog(t, 26.2, 27.6));
+    const a2 = easeOut(prog(t, 26.8, 28.2));
+    document.getElementById('act5-arc1').style.strokeDashoffset = (603 - a1 * 320).toFixed(1);
+    document.getElementById('act5-arc2').style.strokeDashoffset = (603 - a2 * 190).toFixed(1);
+    const s1 = easeOut(prog(t, 26.7, 27.5));
+    const s2 = easeOut(prog(t, 27.6, 28.4));
+    const s3 = easeOut(prog(t, 28.5, 29.3));
+    [ ['act5-s1', s1], ['act5-s2', s2], ['act5-s3', s3] ].forEach(([id, v]) => {
+      const el = document.getElementById(id);
+      el.style.opacity = v;
+      el.style.transform = `translateX(${(1 - v) * 46}px)`;
+    });
+  }
+
+  // Act 6 animations
+  if (t >= 31.8) {
+    const pEnd = easeOut(prog(t, 31.8, 33.2));
+    document.getElementById('act6').style.transform = `scale(${0.95 + pEnd * 0.05})`;
+  }
+};
+
+window.renderAtTime(0);
+</script>
+</body>
+</html>

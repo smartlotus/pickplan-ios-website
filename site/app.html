@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#050506">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pickplan">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('pickplan_app_theme');
+        if (saved === 'light' || saved === 'dark') {
+          var meta = document.querySelector('meta[name="color-scheme"]');
+          if (meta) meta.setAttribute('content', saved);
+          document.documentElement.dataset.theme = saved;
+        }
+      } catch (_) {}
+    })();
+  </script>
+  <link rel="icon" href="/assets/pickplanlogo.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/styles/webapp.css">
+  <script src="/scripts/webapp.js" defer></script>
+  <title>Pickplan · 做计划，说大白话</title>
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+  </div>
+
+  <!-- Adaptive App Shell (iPad 3-col / iPhone single-col + floating Liquid Glass dock) -->
+  <div class="app-shell">
+    <!-- Left Sidebar (iPad / Desktop NavigationSplitView Column 1) -->
+    <aside class="sidebar glass-panel" aria-label="视图与智能分组">
+      <div class="sidebar-brand">
+        <a href="/index.html" class="brand-link" title="返回产品介绍页">
+          <img src="/assets/pickplanlogo.jpg" width="30" height="30" alt="">
+          <span>Pickplan</span>
+        </a>
+        <span class="ver-badge">v2.0</span>
+      </div>
+
+      <div class="sidebar-group">
+        <p class="side-label" data-i18n="side_views">工作台</p>
+        <button type="button" class="side-nav-btn is-active" data-view-target="manual">
+          <span data-i18n="nav_manual">自己做 · 任务</span>
+          <span class="badge-count" id="side-active-count">0</span>
+        </button>
+        <button type="button" class="side-nav-btn" data-view-target="ai">
+          <span data-i18n="nav_ai">AI 帮做 · 大白话</span>
+          <span>✦</span>
+        </button>
+        <button type="button" class="side-nav-btn" data-view-target="vault">
+          <span data-i18n="nav_vault">本地数据金库</span>
+          <span class="badge-count" id="side-snap-count">0</span>
+        </button>
+      </div>
+
+      <div class="sidebar-group">
+        <p class="side-label" data-i18n="side_filters">时间与状态分组</p>
+        <button type="button" class="filter-chip-row is-active" data-section-filter="all">
+          <span data-i18n="sec_all">全部任务</span><span id="cnt-all">0</span>
+        </button>
+        <button type="button" class="filter-chip-row" data-section-filter="overdue">
+          <span data-i18n="sec_overdue">已逾期</span><span id="cnt-overdue">0</span>
+        </button>
+        <button type="button" class="filter-chip-row" data-section-filter="today">
+          <span data-i18n="sec_today">今天</span><span id="cnt-today">0</span>
+        </button>
+        <button type="button" class="filter-chip-row" data-section-filter="tomorrow">
+          <span data-i18n="sec_tomorrow">明天</span><span id="cnt-tomorrow">0</span>
+        </button>
+        <button type="button" class="filter-chip-row" data-section-filter="later">
+          <span data-i18n="sec_later">之后</span><span id="cnt-later">0</span>
+        </button>
+        <button type="button" class="filter-chip-row" data-section-filter="completed">
+          <span data-i18n="sec_completed">已完成</span><span id="cnt-completed">0</span>
+        </button>
+      </div>
+
+      <div class="sidebar-footer glass-pill">
+        <div>
+          <strong id="sidebar-autobackup-state">自动备份已开启</strong>
+          <small id="sidebar-last-backup">等待首次快照</small>
+        </div>
+        <button type="button" class="mini-action" id="sidebar-backup-now" title="立即备份 (⌘B)">↻</button>
+      </div>
+    </aside>
+
+    <!-- Main Column -->
+    <div class="main-column">
+      <header class="app-header glass-panel">
+        <div class="header-left">
+          <h1 id="view-heading">Pickplan</h1>
+          <span class="subtitle-pill" id="header-progress-pill">0 / 0</span>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="icon-btn glass-pill" id="btn-test-notif" title="通知测试">🔔</button>
+          <button type="button" class="icon-btn glass-pill" id="btn-theme" title="深浅色">◐</button>
+          <button type="button" class="icon-btn glass-pill" id="btn-lang">中</button>
+          <button type="button" class="icon-btn glass-pill" command="show-modal" commandfor="settings-dialog" title="AI 引擎设置">⚙</button>
+        </div>
+      </header>
+
+      <main id="app-main" class="app-content">
+        <!-- VIEW 1: MANUAL PLAN -->
+        <section id="view-manual" class="workspace-view" aria-label="自己做任务列表">
+          <div class="search-filter-bar">
+            <search class="search-box glass-pill">
+              <label class="visually-hidden" for="task-search">搜索待办</label>
+              <input id="task-search" type="search" placeholder="搜索任务或备注 (⌘F)…" autocomplete="off">
+            </search>
+            <div class="tag-pills" role="group" aria-label="标签筛选">
+              <button type="button" class="tag-pill is-active" data-tag-filter="all" data-i18n="tag_all">全部</button>
+              <button type="button" class="tag-pill" data-tag-filter="work" data-i18n="tag_work">工作</button>
+              <button type="button" class="tag-pill" data-tag-filter="life" data-i18n="tag_life">生活</button>
+              <button type="button" class="tag-pill" data-tag-filter="study" data-i18n="tag_study">学习</button>
+              <button type="button" class="tag-pill" data-tag-filter="idea" data-i18n="tag_idea">灵感</button>
+            </div>
+          </div>
+
+          <div class="ipad-only-quickbar">
+            <button type="button" class="btn-solid" id="btn-new-task-top" command="show-modal" commandfor="editor-dialog" data-i18n="btn_new_task">+ 新建任务 (⌘N)</button>
+          </div>
+
+          <div id="sections-container" class="sections-container"></div>
+        </section>
+
+        <!-- VIEW 2: AI PLAIN WORDS -->
+        <section id="view-ai" class="workspace-view" hidden>
+          <div class="ai-banner glass-panel">
+            <div>
+              <h2 data-i18n="ai_title">说大白话，我来整理成计划草稿</h2>
+              <p id="ai-engine-subtitle" data-i18n="ai_subtitle">已启用：离线中文/英文时间语义拆解引擎（也可在设置中接入 DeepSeek / Kimi / OpenAI）</p>
+            </div>
+            <div class="sample-chips">
+              <button type="button" class="sample-chip glass-pill" data-ai-sample="0" data-i18n="samp_work">工作示例</button>
+              <button type="button" class="sample-chip glass-pill" data-ai-sample="1" data-i18n="samp_life">生活示例</button>
+              <button type="button" class="sample-chip glass-pill" data-ai-sample="2" data-i18n="samp_study">学习示例</button>
+            </div>
+          </div>
+
+          <div id="ai-chat-stream" class="ai-chat-stream"></div>
+
+          <form id="ai-compose-form" class="ai-composer glass-panel">
+            <label class="visually-hidden" for="ai-input">用大白话说出你的安排</label>
+            <textarea id="ai-input" rows="2" placeholder="试试：明天上午买菜，下午三点开会，周五前交报告…"></textarea>
+            <button type="submit" class="btn-solid" id="ai-send-btn" data-i18n="ai_parse_btn">拆解草稿 ✦</button>
+          </form>
+        </section>
+
+        <!-- VIEW 3: LOCAL DATA VAULT & AUTO-BACKUP -->
+        <section id="view-vault" class="workspace-view" hidden>
+          <div class="vault-grid">
+            <!-- Card 1: Storage Telemetry & Hygiene -->
+            <article class="vault-card glass-panel">
+              <div class="vault-card-head">
+                <h2 data-i18n="v_telemetry">本地存储与数据管理</h2>
+                <span class="mono-pill" id="vault-total-bytes">0 KB</span>
+              </div>
+              <div class="telemetry-bars">
+                <div class="tele-row"><span data-i18n="v_live_todos">实时任务数</span><strong id="tele-todos">0</strong></div>
+                <div class="tele-row"><span data-i18n="v_completed">已完成可清理</span><strong id="tele-completed">0</strong></div>
+                <div class="tele-row"><span data-i18n="v_snaps">本地快照数</span><strong id="tele-snaps">0</strong></div>
+                <div class="tele-row"><span data-i18n="v_ai_hist">AI 对话记录</span><strong id="tele-chats">0</strong></div>
+              </div>
+              <div class="hygiene-actions">
+                <button type="button" class="btn-glass glass-pill" id="btn-clear-completed" data-i18n="act_clear_done">清理已完成任务</button>
+                <button type="button" class="btn-glass glass-pill" id="btn-dedupe" data-i18n="act_dedupe">去重与完整性校验</button>
+                <button type="button" class="btn-glass glass-pill" id="btn-clear-chat" data-i18n="act_clear_chat">清空 AI 对话</button>
+                <button type="button" class="btn-danger" id="btn-factory-reset" data-i18n="act_reset">重置全部本地数据</button>
+              </div>
+            </article>
+
+            <!-- Card 2: Import / Export -->
+            <article class="vault-card glass-panel">
+              <div class="vault-card-head">
+                <h2 data-i18n="v_io">全量本地导入导出</h2>
+                <span class="mono-pill">.pickplan.json</span>
+              </div>
+              <p class="card-desc" data-i18n="v_io_desc">与原生 Pickplan iOS 应用 100% 互通，同时无损兼容原 Android v1 JSON 导出文件。</p>
+              <label class="toggle-line">
+                <input type="checkbox" id="opt-include-apikey">
+                <span data-i18n="v_include_key">导出时包含 AI API Key（仅建议可信设备勾选）</span>
+              </label>
+              <div class="io-buttons">
+                <button type="button" class="btn-solid" id="btn-export-json" data-i18n="btn_export_json">导出完整备份 (.pickplan.json)</button>
+                <button type="button" class="btn-glass glass-pill" id="btn-export-md" data-i18n="btn_export_md">导出 Markdown 清单 (.md)</button>
+                <label class="btn-glass glass-pill file-import-label" for="file-import-input" data-i18n="btn_import_json">导入备份 (v2 或 Android v1) ↑</label>
+                <input type="file" id="file-import-input" accept=".json,.pickplan.json,application/json" class="visually-hidden">
+              </div>
+            </article>
+
+            <!-- Card 3: Scheduled Auto-Backup Policy -->
+            <article class="vault-card glass-panel">
+              <div class="vault-card-head">
+                <h2 data-i18n="v_auto">定时自动本地备份</h2>
+                <span class="mono-pill" id="auto-next-pill">已开启</span>
+              </div>
+              <div class="policy-form">
+                <label class="toggle-line">
+                  <input type="checkbox" id="policy-enabled" checked>
+                  <span data-i18n="pol_enable">开启定时自动本地快照</span>
+                </label>
+                <label class="toggle-line">
+                  <input type="checkbox" id="policy-bg" checked>
+                  <span data-i18n="pol_bg">切后台/关闭前若有改动自动建快照</span>
+                </label>
+                <div class="select-grid">
+                  <label>
+                    <span data-i18n="pol_interval">自动备份周期</span>
+                    <select id="policy-interval">
+                      <option value="1">每 1 小时</option>
+                      <option value="6">每 6 小时</option>
+                      <option value="24" selected>每 24 小时（推荐）</option>
+                      <option value="168">每 7 天</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span data-i18n="pol_max">最多保留快照数</span>
+                    <select id="policy-max">
+                      <option value="5">5 份</option>
+                      <option value="10">10 份</option>
+                      <option value="15" selected>15 份</option>
+                      <option value="30">30 份</option>
+                      <option value="50">50 份</option>
+                    </select>
+                  </label>
+                </div>
+                <button type="button" class="btn-solid" id="btn-backup-now" data-i18n="btn_backup_now">立即创建本地快照 (⌘B)</button>
+              </div>
+            </article>
+
+            <!-- Card 4: Snapshot Timeline -->
+            <article class="vault-card glass-panel vault-wide">
+              <div class="vault-card-head">
+                <h2 data-i18n="v_timeline">本地快照时间线（置顶快照不会被自动轮转清理）</h2>
+              </div>
+              <div id="snapshots-list" class="snapshots-list"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Right Inspector Column (iPad / Desktop Column 3) -->
+    <aside class="inspector glass-panel" aria-label="任务详情与专注计时器">
+      <div class="inspector-section">
+        <p class="side-label" data-i18n="ins_focus">沉浸专注计时器</p>
+        <div class="focus-card glass-pill">
+          <div class="focus-ring">
+            <svg viewBox="0 0 120 120" width="112" height="112" aria-hidden="true">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="6"/>
+              <circle id="focus-arc" cx="60" cy="60" r="52" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="326.7" stroke-dashoffset="0"/>
+            </svg>
+            <span id="focus-timer-text">25:00</span>
+          </div>
+          <p id="focus-task-title" class="focus-task-name" data-i18n="focus_idle">选择一个任务开始专注</p>
+          <div class="focus-btns">
+            <button type="button" class="btn-solid" id="btn-focus-toggle" data-i18n="focus_start">开始专注</button>
+            <button type="button" class="btn-glass glass-pill" id="btn-focus-reset" data-i18n="focus_reset">重置</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="inspector-section" id="inspector-detail">
+        <p class="side-label" data-i18n="ins_detail">选中任务概览</p>
+        <div class="detail-empty" id="detail-empty" data-i18n="ins_empty">点击任意任务可编辑、添加子任务或开启专注计时。</div>
+        <div id="detail-card" class="detail-card glass-pill" hidden>
+          <h3 id="detail-title"></h3>
+          <p id="detail-notes"></p>
+          <div id="detail-meta" class="detail-meta"></div>
+          <div class="detail-actions">
+            <button type="button" class="btn-glass glass-pill" id="detail-edit-btn" data-i18n="btn_edit">编辑</button>
+            <button type="button" class="btn-glass glass-pill" id="detail-focus-btn" data-i18n="btn_focus_this">专注此项</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Floating Liquid Glass Bottom Dock (iPhone / Compact Screens) -->
+  <div class="mobile-dock" role="navigation" aria-label="底部主导航">
+    <div class="mobile-capsule glass-pill" role="tablist">
+      <button type="button" role="tab" aria-selected="true" data-view-target="manual" data-i18n="mob_manual">自己做</button>
+      <button type="button" role="tab" aria-selected="false" data-view-target="ai" data-i18n="mob_ai">AI 帮做</button>
+      <button type="button" role="tab" aria-selected="false" data-view-target="vault" data-i18n="mob_vault">金库</button>
+    </div>
+    <button type="button" class="mobile-fab glass-pill" command="show-modal" commandfor="editor-dialog" aria-label="新建任务">＋</button>
+  </div>
+
+  <!-- Floating Undo / Status Toast -->
+  <div id="toast-banner" class="toast-banner glass-pill" role="status" aria-live="polite" hidden>
+    <span id="toast-text"></span>
+    <button type="button" id="toast-undo-btn" class="toast-undo" hidden data-i18n="undo">撤销</button>
+  </div>
+
+  <!-- Task Create / Edit Modal -->
+  <dialog id="editor-dialog" class="glass-dialog" closedby="any" aria-labelledby="editor-title">
+    <form id="editor-form" method="dialog">
+      <div class="dialog-header">
+        <h2 id="editor-title" data-i18n="ed_new">新建任务</h2>
+        <button type="button" class="dialog-close" command="close" commandfor="editor-dialog" aria-label="关闭">✕</button>
+      </div>
+      <div class="dialog-body">
+        <input type="hidden" id="ed-id">
+        <label class="field">
+          <span data-i18n="ed_task_title">任务标题（必填）</span>
+          <input type="text" id="ed-title" required autofocus placeholder="写下接下来要完成的事…">
+        </label>
+        <div class="quick-time-chips">
+          <button type="button" class="qchip glass-pill" data-quick="tonight" data-i18n="q_tonight">今晚 20:00</button>
+          <button type="button" class="qchip glass-pill" data-quick="tomorrow_am" data-i18n="q_tmr_am">明早 09:00</button>
+          <button type="button" class="qchip glass-pill" data-quick="tomorrow_pm" data-i18n="q_tmr_pm">明天 15:00</button>
+          <button type="button" class="qchip glass-pill" data-quick="next_mon" data-i18n="q_mon">下周一 09:00</button>
+        </div>
+        <div class="two-cols">
+          <label class="field">
+            <span data-i18n="ed_reminder">提醒时间</span>
+            <input type="datetime-local" id="ed-reminder">
+          </label>
+          <label class="field">
+            <span data-i18n="ed_deadline">截止时间</span>
+            <input type="datetime-local" id="ed-deadline">
+          </label>
+        </div>
+        <div class="two-cols">
+          <label class="field">
+            <span data-i18n="ed_tag">标签</span>
+            <select id="ed-tag">
+              <option value="none">无标签</option>
+              <option value="work">工作</option>
+              <option value="life">生活</option>
+              <option value="study">学习</option>
+              <option value="idea">灵感</option>
+            </select>
+          </label>
+          <label class="field">
+            <span data-i18n="ed_priority">优先级</span>
+            <select id="ed-priority">
+              <option value="normal">普通</option>
+              <option value="high">高优先</option>
+              <option value="low">低优先</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span data-i18n="ed_notes">备注 / 子任务（每行可作为一条子任务）</span>
+          <textarea id="ed-notes" rows="3" placeholder="可选备注或按行拆分的步骤…"></textarea>
+        </label>
+      </div>
+      <div class="dialog-footer">
+        <button type="button" class="btn-glass glass-pill" command="close" commandfor="editor-dialog" data-i18n="cancel">取消</button>
+        <button type="submit" class="btn-solid" data-i18n="save">保存任务</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- AI Settings Modal -->
+  <dialog id="settings-dialog" class="glass-dialog" closedby="any" aria-labelledby="settings-title">
+    <form id="settings-form" method="dialog">
+      <div class="dialog-header">
+        <h2 id="settings-title" data-i18n="set_title">AI 引擎与接口设置</h2>
+        <button type="button" class="dialog-close" command="close" commandfor="settings-dialog" aria-label="关闭">✕</button>
+      </div>
+      <div class="dialog-body">
+        <p class="card-desc" data-i18n="set_desc">保留原版 Android 全部 OpenAI 兼容平台预设；Key 仅存本机。未填 Key 时也可直接使用离线大白话解析。</p>
+        <label class="field">
+          <span data-i18n="set_provider">平台预设</span>
+          <select id="set-provider">
+            <option value="DeepSeek">DeepSeek</option>
+            <option value="Kimi (Moonshot)">Kimi (Moonshot)</option>
+            <option value="Tongyi Qwen">Tongyi Qwen</option>
+            <option value="GLM">GLM</option>
+            <option value="SiliconFlow">SiliconFlow</option>
+            <option value="OpenAI">OpenAI</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Base URL</span>
+          <input type="url" id="set-url" placeholder="https://api.deepseek.com/v1">
+        </label>
+        <label class="field">
+          <span data-i18n="set_model">模型名称</span>
+          <input type="text" id="set-model" placeholder="deepseek-chat">
+        </label>
+        <label class="field">
+          <span>API Key</span>
+          <input type="password" id="set-key" placeholder="sk-...（可选）" autocomplete="off">
+        </label>
+        <div class="test-row">
+          <button type="button" class="btn-glass glass-pill" id="btn-test-ai" data-i18n="set_test">测试连接</button>
+          <span id="set-test-status" role="status"></span>
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button type="button" class="btn-glass glass-pill" command="close" commandfor="settings-dialog" data-i18n="cancel">取消</button>
+        <button type="submit" class="btn-solid" data-i18n="save">保存设置</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Import Preview & Strategy Modal -->
+  <dialog id="import-dialog" class="glass-dialog" closedby="any" aria-labelledby="import-title">
+    <div class="dialog-header">
+      <h2 id="import-title" data-i18n="imp_title">确认导入备份文件</h2>
+      <button type="button" class="dialog-close" command="close" commandfor="import-dialog" aria-label="关闭">✕</button>
+    </div>
+    <div class="dialog-body">
+      <div id="import-summary-box" class="summary-box"></div>
+      <fieldset class="strategy-fieldset">
+        <legend data-i18n="imp_strategy">选择导入合并方式</legend>
+        <label><input type="radio" name="import-strategy" value="smartMerge" checked> <span data-i18n="imp_s1">智能合并（同 ID 取较新版本，新任务直接加入）</span></label>
+        <label><input type="radio" name="import-strategy" value="appendCopy"> <span data-i18n="imp_s2">追加为新副本（保留现有全部任务不修改）</span></label>
+        <label><input type="radio" name="import-strategy" value="replaceAll"> <span data-i18n="imp_s3">安全覆盖（覆盖前自动为当前数据建立回滚快照）</span></label>
+      </fieldset>
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn-glass glass-pill" command="close" commandfor="import-dialog" data-i18n="cancel">取消</button>
+      <button type="button" class="btn-solid" id="btn-confirm-import" autofocus data-i18n="imp_confirm">确认导入</button>
+    </div>
+  </dialog>
+</body>
+</html>
