@@ -323,6 +323,76 @@
     font-size: 13px;
     font-weight: 700;
   }
+  .ios-toolbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ios-icon-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.22);
+  }
+  .ios-lang-btn {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.24);
+  }
+  .todo-del {
+    color: rgba(255,255,255,0.38);
+    font-size: 15px;
+    margin-left: auto;
+    padding-left: 8px;
+  }
+  .floating-add-pill {
+    position: absolute;
+    right: 22px;
+    bottom: 102px;
+    background: #FFFFFF;
+    color: #050506;
+    border-radius: 999px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 750;
+    box-shadow: 0 14px 32px rgba(0,0,0,0.65);
+  }
+  .draft-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  .draft-btn-edit {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.26);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+  }
+  .draft-btn-add {
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    background: #fff;
+    color: #050506;
+  }
+  .draft-btn-add.added {
+    background: rgba(143,227,176,0.22);
+    border: 1px solid rgba(143,227,176,0.55);
+    color: var(--mint);
+  }
   .glass-dock {
     position: absolute;
     left: 18px;
@@ -675,7 +745,7 @@
           </svg>
         </span>。
       </h1>
-      <p class="act1-sub">如今凝成 iOS 26 液态玻璃 · 为 iPhone 与 iPad 零费用打造</p>
+      <p class="act1-sub">忠实移植 Android 原版 · 凝成 iOS 26 原生液态玻璃应用</p>
     </div>
     <div class="iris-mask" id="act1-iris"></div>
   </section>
@@ -684,13 +754,13 @@
   <section class="act" id="act2">
     <div class="act2-layout">
       <div class="act-copy" id="act2-copy">
-        <span class="eyebrow"><span class="dot"></span> 02 / iOS 26 LIQUID GLASS</span>
-        <h2>黑白极简，<br>折射出真实呼吸。</h2>
-        <p>保留 Android 原版高对比纯黑哲学，升级为原生 <code>GlassEffectContainer</code> 悬浮胶囊栏、实时折射卡片与触感弹簧反馈。</p>
+        <span class="eyebrow"><span class="dot"></span> 02 / NATIVE SWIFTUI LIQUID GLASS</span>
+        <h2>忠实 Android 原版，<br>凝成原生液态玻璃。</h2>
+        <p>完整保留纯黑高对比美学、6 大智能时间分组与单指点删撤销；在 iPhone 与 iPad 上融入原生 <code>GlassEffectContainer</code> 悬浮胶囊、实时折射与触感反馈。</p>
         <div class="feature-chips">
-          <span class="feature-chip glass-pill">GlassEffectContainer 形变导航</span>
-          <span class="feature-chip glass-pill">滑动完成 / 6秒玻璃撤销</span>
-          <span class="feature-chip glass-pill">6 大智能时间分组</span>
+          <span class="feature-chip glass-pill">1:1 移植 Android 手动模式</span>
+          <span class="feature-chip glass-pill">双通知 + 🔔 测试推送</span>
+          <span class="feature-chip glass-pill">6 大分组 · 玻璃撤销条</span>
         </div>
       </div>
 
@@ -699,46 +769,57 @@
           <div class="dynamic-island"></div>
           <div class="ios-header">
             <h3>Pickplan</h3>
-            <span class="ios-badge glass-pill" id="act2-progress-label">1 / 3 完成</span>
+            <div class="ios-toolbar-icons">
+              <span class="ios-icon-btn">🔔</span>
+              <span class="ios-icon-btn">↻</span>
+              <span class="ios-lang-btn">中</span>
+              <span class="ios-icon-btn">⚙</span>
+            </div>
           </div>
           <div class="ios-progress-track">
             <div class="ios-progress-fill" id="act2-progress-fill" style="width: 33%"></div>
           </div>
-          <div class="ios-section-label">☀ 今天 · TODAY</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin: 2px 4px 12px;">
+            <span class="ios-section-label" style="margin:0;">今天 · 周二</span>
+            <span class="ios-badge glass-pill" id="act2-progress-label" style="padding:3px 10px;font-size:12px;">1 / 3 完成</span>
+          </div>
           <div class="todo-card glass-card">
             <div class="todo-check checked">✓</div>
             <div class="todo-meta">
               <div class="todo-title" style="text-decoration: line-through; color: rgba(255,255,255,0.5)">早上买新鲜蔬果与咖啡豆</div>
-              <div class="todo-sub">提醒 09:00 · 生活</div>
+              <div class="todo-sub">提醒 09:00</div>
             </div>
+            <span class="todo-del">✕</span>
           </div>
           <div class="todo-card glass-card" id="act2-task2">
             <div class="todo-check" id="act2-check2"></div>
             <div class="todo-meta">
               <div class="todo-title" id="act2-title2">评审 iOS 液态玻璃原型动效</div>
-              <div class="todo-sub">提醒 15:00 · 工作 · 高优先</div>
+              <div class="todo-sub">提醒 15:00 · 明天下午</div>
             </div>
+            <span class="todo-del">✕</span>
             <div class="touch-ripple" id="act2-ripple" style="left: 31px; top: 41px;"></div>
           </div>
           <div class="todo-card glass-card" id="act2-task3">
             <div class="todo-check"></div>
             <div class="todo-meta">
               <div class="todo-title">周五前提交季度设计总结</div>
-              <div class="todo-sub deadline">截止 周五 18:00 · 工作</div>
+              <div class="todo-sub deadline">截止 周五 18:00</div>
             </div>
+            <span class="todo-del">✕</span>
           </div>
           <div class="undo-toast glass-pill" id="act2-undo" style="opacity: 0; transform: translateY(18px);">
             <span>已删除「旧日程」</span>
             <span class="undo-btn">撤销 Undo</span>
           </div>
+          <div class="floating-add-pill" id="act2-fab">＋ 新任务</div>
           <div class="glass-dock">
             <div class="dock-capsule glass-pill">
               <div class="dock-active-pill" id="act2-dock-pill"></div>
               <div class="dock-item active" id="act2-tab0">自己做</div>
               <div class="dock-item" id="act2-tab1">AI 帮做</div>
-              <div class="dock-item" id="act2-tab2">数据金库</div>
+              <div class="dock-item" id="act2-tab2">本地数据</div>
             </div>
-            <div class="dock-fab glass-pill" id="act2-fab">＋</div>
           </div>
         </div>
       </div>
@@ -749,13 +830,13 @@
   <section class="act" id="act3">
     <div class="act3-wrap">
       <div class="act3-head">
-        <span class="eyebrow"><span class="dot"></span> 03 / PLAIN WORDS -> STRUCTURED DRAFTS</span>
-        <h2>一段大白话，拆成多件清晰的计划。</h2>
-        <p>兼容 DeepSeek / Kimi / Qwen / GLM / SiliconFlow / OpenAI · 断网亦有内置本地解析引擎</p>
+        <span class="eyebrow"><span class="dot"></span> 03 / PLAIN WORDS -> EDIT &amp; CONFIRM DRAFTS</span>
+        <h2>我先整理成草稿，请确认后再加入计划。</h2>
+        <p>完整保留 DeepSeek / Kimi / Qwen / GLM / SiliconFlow / OpenAI 预设与 GET /models 检测 · 新增无网本地拆解</p>
       </div>
       <div class="prompt-bar glass-card">
         <div class="prompt-text"><span id="act3-typed"></span><span class="caret" id="act3-caret"></span></div>
-        <span class="ios-badge glass-pill">✦ 离线 &amp; BYOK 双引擎</span>
+        <span class="ios-badge glass-pill">✦ BYOK &amp; 离线本地引擎</span>
         <div class="shimmer-sweep" id="act3-shimmer" style="left: -260px;"></div>
       </div>
       <div class="draft-grid">
@@ -763,16 +844,28 @@
           <span class="draft-tag">DRAFT 01 · 工作</span>
           <h4>评审新版交互设计</h4>
           <p class="draft-time">◷ 明天 10:00 提醒</p>
+          <div class="draft-actions">
+            <span class="draft-btn-edit">编辑</span>
+            <span class="draft-btn-add" id="act3-add1">加入</span>
+          </div>
         </div>
         <div class="draft-card glass-card" id="act3-d2">
           <span class="draft-tag">DRAFT 02 · 工作</span>
           <h4>给重点客户回电沟通</h4>
           <p class="draft-time">◷ 明天 15:00 提醒</p>
+          <div class="draft-actions">
+            <span class="draft-btn-edit">编辑</span>
+            <span class="draft-btn-add" id="act3-add2">加入</span>
+          </div>
         </div>
         <div class="draft-card glass-card" id="act3-d3">
           <span class="draft-tag">DRAFT 03 · 截止</span>
           <h4>提交本周复盘报告</h4>
           <p class="draft-time coral">⚑ 周五 18:00 截止</p>
+          <div class="draft-actions">
+            <span class="draft-btn-edit">编辑</span>
+            <span class="draft-btn-add" id="act3-add3">加入</span>
+          </div>
         </div>
       </div>
       <div class="add-all-pill glass-pill" id="act3-cta">全部加入计划 ＋</div>
@@ -799,10 +892,10 @@
             <div class="ipad-col glass-card">
               <div style="font-weight: 800; font-size: 20px; margin-bottom: 10px;">Pickplan</div>
               <div class="ipad-nav-item active"><span>今天 Today</span><span>3</span></div>
-              <div class="ipad-nav-item"><span>明天 Tomorrow</span><span>2</span></div>
+              <div class="ipad-nav-item"><span>明天 · 之后</span><span>2</span></div>
               <div class="ipad-nav-item"><span>AI 帮做</span><span>✦</span></div>
-              <div class="ipad-nav-item"><span>数据金库 Vault</span><span>✓</span></div>
-              <div style="margin-top: auto; font-size: 13px; color: rgba(255,255,255,0.58);">自动备份：每 24 小时<br>上次快照：刚刚</div>
+              <div class="ipad-nav-item"><span>本地数据</span><span>✓</span></div>
+              <div style="margin-top: auto; font-size: 13px; color: rgba(255,255,255,0.58);">自动备份：每日 22:00<br>上次快照：刚刚</div>
             </div>
             <div class="ipad-col glass-card">
               <div style="font-size: 14px; color: rgba(255,255,255,0.58); font-weight: 700;">☀ 今天待办</div>
@@ -855,7 +948,7 @@
                 <div class="dock-active-pill"></div>
                 <div class="dock-item active" style="font-size: 10px;">自己做</div>
                 <div class="dock-item" style="font-size: 10px;">AI</div>
-                <div class="dock-item" style="font-size: 10px;">金库</div>
+                <div class="dock-item" style="font-size: 10px;">数据</div>
               </div>
               <div class="dock-fab glass-pill" style="width: 48px; height: 48px; font-size: 22px;">＋</div>
             </div>
@@ -876,37 +969,37 @@
         </svg>
         <div>
           <div style="font-size: 40px; font-weight: 800;">160 KB</div>
-          <div style="font-size: 16px; color: rgba(255,255,255,0.62); margin-top: 4px;">全部数据完全保存在本机 · SHA256 校验</div>
+          <div style="font-size: 16px; color: rgba(255,255,255,0.62); margin-top: 4px;">原生本机存储 · 每日 22:00 定时快照</div>
         </div>
         <div class="vault-stats">
           <div class="vault-stat"><strong>v1 + v2</strong><span>Android 无损导入</span></div>
-          <div class="vault-stat"><strong>15 份</strong><span>智能轮转快照</span></div>
+          <div class="vault-stat"><strong>15 份</strong><span>智能轮转保护</span></div>
         </div>
       </div>
       <div class="act5-right">
         <span class="eyebrow"><span class="dot"></span> 05 / LOCAL DATA SOVEREIGNTY</span>
-        <h2>本地导入导出、<br>定时备份与数据管理。</h2>
+        <h2>全量本地导入导出、<br>定时备份与数据管理。</h2>
         <div class="snapshot-list">
           <div class="snapshot-row glass-card" id="act5-s1">
             <div>
               <div class="snap-name">PickPlan-auto-20261117.pickplan.json</div>
-              <div class="snap-meta">定时自动快照 · 14 项任务 · 已校验</div>
+              <div class="snap-meta">定时自动快照 · 每日 22:00 · 支持任务清单预览</div>
             </div>
             <span class="snap-badge">Files 文件夹可见</span>
           </div>
           <div class="snapshot-row glass-card" id="act5-s2">
             <div>
               <div class="snap-name">PickPlan-safety-pre-restore.pickplan.json</div>
-              <div class="snap-meta">置顶保护 · 覆盖前自动建立回滚点</div>
+              <div class="snap-meta">置顶保护 · 覆盖恢复前自动建立 SHA256 回滚点</div>
             </div>
             <span class="snap-badge">PINNED · 置顶保护</span>
           </div>
           <div class="snapshot-row glass-card" id="act5-s3">
             <div>
               <div class="snap-name">支持：智能合并 / 追加导入 / Markdown 导出</div>
-              <div class="snap-meta">无服务器、无账号、彻底由你掌控</div>
+              <div class="snap-meta">一键清理已完成、去重校验、完全离线掌握</div>
             </div>
-            <span class="snap-badge">零云端依赖</span>
+            <span class="snap-badge">100% 本地主权</span>
           </div>
         </div>
       </div>
@@ -918,11 +1011,11 @@
     <div class="act6-center">
       <div class="act6-logo"><img src="../site/assets/pickplanlogo.jpg" alt="Pickplan"></div>
       <div class="act6-wordmark">PICKPLAN</div>
-      <div class="act6-tagline">做计划，说大白话 · iOS &amp; iPadOS 液态玻璃版</div>
+      <div class="act6-tagline">做计划，说大白话 · 原生 iOS &amp; iPadOS 液态玻璃应用</div>
       <div class="act6-badges">
-        <span class="feature-chip glass-pill">Safari 独立 Web App</span>
-        <span class="feature-chip glass-pill">SideStore 免签侧载</span>
-        <span class="feature-chip glass-pill">Xcode 免费 Apple ID</span>
+        <span class="feature-chip glass-pill">原生 SwiftUI 液态玻璃</span>
+        <span class="feature-chip glass-pill">SideStore 无线侧载 .ipa</span>
+        <span class="feature-chip glass-pill">Xcode 免费个人签名</span>
       </div>
     </div>
   </section>
@@ -1035,10 +1128,17 @@ window.renderAtTime = function(t) {
 
     const ctaAdded = t >= 18.85;
     const ctaEl = document.getElementById('act3-cta');
+    const draftAddIds = ['act3-add1', 'act3-add2', 'act3-add3'];
+    draftAddIds.forEach((id) => {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      btn.classList.toggle('added', ctaAdded);
+      btn.textContent = ctaAdded ? '✓ 已加入计划' : '加入';
+    });
     if (ctaAdded) {
       ctaEl.style.background = '#FFFFFF';
       ctaEl.style.color = '#050506';
-      ctaEl.textContent = '已加入 3 个任务 ✓';
+      ctaEl.textContent = '已全部加入 3 项 ✓';
     } else {
       ctaEl.style.background = '';
       ctaEl.style.color = '#FFFFFF';

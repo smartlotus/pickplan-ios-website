@@ -320,7 +320,7 @@ button { cursor: pointer; }
   background: var(--ink);
 }
 .hero h1 {
-  font-size: clamp(2.4rem, 4.4vw, 4.35rem);
+  font-size: clamp(2.05rem, 4.4vw, 4.35rem);
   font-weight: 850;
   letter-spacing: -0.04em;
   line-height: 1.15;
@@ -500,6 +500,28 @@ button { cursor: pointer; }
   margin-block-end: 0.7rem;
 }
 .app-title { font-size: 1.2rem; font-weight: 800; }
+.demo-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.demo-icon-btn {
+  min-inline-size: 1.85rem;
+  min-block-size: 1.85rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: #f5f5f2;
+  font-size: 0.78rem;
+  display: inline-grid;
+  place-items: center;
+}
+.demo-toast-msg {
+  font-size: 0.74rem;
+  color: #e6f4ea;
+  min-block-size: 1.05rem;
+  margin-block-end: 0.35rem;
+}
 .app-pill {
   padding: 0.28rem 0.7rem;
   border-radius: 999px;
@@ -562,6 +584,90 @@ button { cursor: pointer; }
   color: rgba(255,255,255,0.58);
 }
 .demo-task small.is-deadline { color: #ef8a9a; }
+.demo-del-btn {
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  font-size: 0.85rem;
+  padding: 0.25rem 0.35rem;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+.demo-del-btn:hover {
+  color: #ffffff;
+  background: rgba(255,255,255,0.12);
+}
+.demo-ai-intro {
+  font-size: 0.76rem;
+  color: rgba(255,255,255,0.68);
+  margin-block-end: 0.6rem;
+}
+.demo-draft-card {
+  border-radius: 1rem;
+  padding: 0.7rem 0.85rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.demo-draft-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+.demo-draft-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+.demo-draft-meta {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.62);
+}
+.demo-draft-btns {
+  display: flex;
+  gap: 0.35rem;
+}
+.demo-mini-edit, .demo-mini-add {
+  border-radius: 999px;
+  padding: 0.24rem 0.62rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  border: 1px solid rgba(255,255,255,0.24);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+.demo-mini-add {
+  background: #ffffff;
+  color: #050506;
+  border-color: #ffffff;
+}
+.demo-mini-add.is-added {
+  background: rgba(143,227,176,0.22);
+  color: #8fe3b0;
+  border-color: rgba(143,227,176,0.5);
+}
+.demo-undo-bar {
+  margin-block-start: 0.55rem;
+  border-radius: 999px;
+  padding: 0.48rem 0.75rem 0.48rem 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 0.76rem;
+  color: #fff;
+}
+.demo-undo-btn {
+  border: 0;
+  background: #ffffff;
+  color: #050506;
+  border-radius: 999px;
+  padding: 0.24rem 0.7rem;
+  font-size: 0.74rem;
+  font-weight: 750;
+}
 
 .demo-quick-row {
   display: flex;
@@ -579,12 +685,14 @@ button { cursor: pointer; }
   color: #fff;
 }
 .demo-quick-row button {
-  min-inline-size: 2.5rem;
+  min-inline-size: 4.5rem;
   min-block-size: 2.5rem;
-  border-radius: 50%;
+  border-radius: 999px;
+  padding-inline: 0.85rem;
   border: 0;
   background: #fff;
   color: #050506;
+  font-size: 0.78rem;
   font-weight: 800;
 }
 
@@ -741,7 +849,7 @@ button { cursor: pointer; }
 }
 .ipad-inspector-title { font-weight: 700; font-size: 0.88rem; }
 .ipad-inspector-sub { font-size: 0.75rem; color: rgba(255,255,255,0.62); }
-.small-cta { padding: 0.5rem 0.85rem; font-size: 0.76rem; min-block-size: 2.2rem; margin-block-start: auto; }
+.small-cta { padding: 0.45rem 0.65rem; font-size: 0.72rem; min-block-size: 2.2rem; margin-block-start: auto; white-space: nowrap; text-align: center; }
 .stage-caption {
   font-size: 0.82rem;
   color: var(--muted);
@@ -1159,7 +1267,7 @@ dialog.glass-dialog::backdrop {
 
 @media (max-width: 680px) {
   .site-nav { display: none; }
-  .header-glass { padding: 0.5rem 0.6rem 0.5rem 0.85rem; }
+  .header-glass { padding: 0.65rem 0.85rem; border-radius: 1.4rem; }
   .theme-label { display: none; }
   .hero { padding-block: 2rem 3rem; }
   .vault-layout { padding: 1.4rem; }
