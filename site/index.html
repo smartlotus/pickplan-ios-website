@@ -3,456 +3,567 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#050506">
+  <meta name="color-scheme" content="light dark">
   <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem('pickplan_site_theme');
-        if (saved === 'light' || saved === 'dark') {
-          var meta = document.querySelector('meta[name="color-scheme"]');
-          if (meta) meta.setAttribute('content', saved);
-          document.documentElement.dataset.theme = saved;
-        }
-      } catch (_) {}
-    })();
+    try {
+      var saved = localStorage.getItem('pickplan_color_scheme');
+      if (saved === 'light' || saved === 'dark') {
+        document.querySelector('meta[name="color-scheme"]').content = saved;
+      }
+    } catch (_) {}
   </script>
-  <meta name="description" content="Pickplan iOS &amp; iPadOS 原生液态玻璃版：1:1 忠实移植 Android 原版极简待办与 7 大 AI 预设，新增本地导入导出、每日定时备份与数据管理，免 $99 开发者费用安装到 iPhone 与 iPad。">
-  <meta property="og:title" content="Pickplan iOS &amp; iPadOS · 原生液态玻璃应用">
-  <meta property="og:description" content="从 Android 忠实移植至原生 SwiftUI iOS 26 Liquid Glass 与 iPadOS 三栏分屏。全量本地数据主权，零开发者费用侧载或 Xcode 直装。">
+  <meta name="description" content="Pickplan iOS &amp; iPadOS 瑞士国际主义规格官网：1:1 忠实移植 Android 原版黑白待办，融合 SwiftUI 26 Liquid Glass 与全量本地导入导出/定时备份，免 $99 开发者费用安装。">
+  <meta property="og:title" content="PICKPLAN // NATIVE iOS &amp; iPadOS 26">
+  <meta property="og:description" content="忠实还原 Android 原版功能与 7 大 AI 预设的原生 SwiftUI Liquid Glass 应用。无需 $99 开发者账号。">
   <meta property="og:image" content="/assets/video-poster.jpg">
   <link rel="icon" href="/assets/pickplanlogo.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="/styles/main.css">
   <script src="/scripts/showcase.js" defer></script>
-  <title>Pickplan iOS &amp; iPadOS · 原生液态玻璃应用</title>
+  <title>PICKPLAN // iOS &amp; iPadOS 原生液态玻璃应用</title>
 </head>
 <body>
-  <!-- Inline SVG optical liquid glass displacement map (sRGB prevents mid-gray shift) -->
-  <svg class="svg-defs" width="0" height="0" aria-hidden="true">
-    <defs>
-      <filter id="liquid-glass-refraction" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="9" result="noise"/>
-        <feGaussianBlur in="noise" stdDeviation="2.4" result="smoothNoise"/>
-        <feDisplacementMap in="SourceGraphic" in2="smoothNoise" scale="11" xChannelSelector="R" yChannelSelector="G"/>
-      </filter>
-    </defs>
-  </svg>
-
-  <div class="scroll-progress" aria-hidden="true"></div>
-  <div class="ambient-field" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="grid-mesh"></div>
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span><span></span>
   </div>
 
-  <a class="skip-link" href="#main-content" data-i18n="skip">跳到正文</a>
+  <a class="skip-link" href="#hero-title" data-i18n="skip">SKIP TO CONTENT ↓</a>
 
-  <header class="site-header wrap">
-    <div class="header-glass glass-surface">
-      <a class="brand" href="#" aria-label="Pickplan 首页">
-        <img src="/assets/pickplanlogo.jpg" width="32" height="32" alt="">
-        <span>Pickplan</span>
-        <span class="brand-badge">SwiftUI 26</span>
+  <div class="swiss-sheet">
+    <!-- STICKY SWISS MASTHEAD -->
+    <header class="masthead">
+      <a class="masthead-brand" href="#hero-title" aria-label="Pickplan Home">
+        <img src="/assets/pickplanlogo.jpg" width="30" height="30" alt="">
+        <span class="brand-wordmark">PICKPLAN</span>
+        <span class="brand-code">SYS.26</span>
       </a>
-      <nav class="site-nav" aria-label="主导航">
-        <a href="#film" data-i18n="nav_film">宣传片</a>
-        <a href="#features" data-i18n="nav_features">原生重构</a>
-        <a href="#vault" data-i18n="nav_vault">本地数据</a>
-        <a href="#install" data-i18n="nav_install">免费装机</a>
+
+      <nav class="masthead-nav" aria-label="Primary">
+        <a href="#film"><span>01</span> <em style="font-style:normal" data-i18n="nav_film">FILM</em></a>
+        <a href="#architecture"><span>02</span> <em style="font-style:normal" data-i18n="nav_arch">SYSTEM</em></a>
+        <a href="#matrix"><span>03</span> <em style="font-style:normal" data-i18n="nav_matrix">MATRIX</em></a>
+        <a href="#vault"><span>04</span> <em style="font-style:normal" data-i18n="nav_vault">VAULT</em></a>
+        <a href="#install"><span>05</span> <em style="font-style:normal" data-i18n="nav_install">INSTALL</em></a>
       </nav>
-      <div class="header-controls">
-        <div class="lang-switch" role="group" aria-label="语言切换">
-          <button type="button" data-lang-btn="zh" aria-pressed="true">中</button>
-          <button type="button" data-lang-btn="en" aria-pressed="false">EN</button>
+
+      <div class="masthead-tools">
+        <button type="button" class="tool-btn" id="grid-toggle" aria-pressed="false" data-i18n="btn_grid">GRID [G]</button>
+        <div class="lang-group" role="group" aria-label="语言切换 / Language">
+          <button type="button" class="tool-btn" data-lang-btn="zh" aria-pressed="true">中</button>
+          <button type="button" class="tool-btn" data-lang-btn="en" aria-pressed="false">EN</button>
         </div>
-        <button type="button" class="icon-pill glass-pill" id="theme-toggle" aria-label="切换深浅色主题" aria-pressed="true">
-          <span class="theme-glyph" aria-hidden="true">◐</span>
-          <span class="theme-label" data-i18n="theme_label">曜黑</span>
+        <button type="button" class="tool-btn" id="theme-toggle" aria-label="Switch color theme" aria-pressed="false">
+          <span aria-hidden="true">◐</span>
+          <span id="theme-label" data-i18n="theme_paper">PAPER</span>
         </button>
-        <a class="cta-pill" href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer" data-i18n="nav_launch">获取 iOS 应用 ↗</a>
+        <a class="tool-cta" href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer" data-i18n="nav_cta">GET .IPA / REPO ↗</a>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main id="main-content" tabindex="-1">
-    <!-- HERO -->
-    <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="signal" aria-hidden="true"></span> <span data-i18n="hero_eyebrow">ANDROID 1:1 PORT · NATIVE SWIFTUI LIQUID GLASS</span></p>
-        <h1 id="hero-title" data-i18n-html="hero_title">做计划，<br>说<span class="plain-word">大白话<svg viewBox="0 0 340 22" aria-hidden="true"><path d="M4 15 Q140 -4 336 9 M40 21 Q150 8 288 15"/></svg></span>。<br>忠实重塑 iOS 应用。</h1>
-        <p class="hero-desc" data-i18n="hero_desc">100% 原生 SwiftUI 忠实移植 Android 原版黑白极简待办，专为 iPhone 与 iPad 打造 iOS 26 Liquid Glass 触感体验；保留 6 大智能分组、7 大 AI 预设与草稿确认流，新增全量本地导入导出、每日定时备份与数据管理，无需 $99 开发者费用。</p>
-
-        <div class="hero-actions">
-          <a class="btn-primary" href="#install" data-i18n="hero_cta_sideload">iPhone / iPad 零费用装机 ↓</a>
-          <a class="btn-glass glass-pill" href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer" data-i18n="hero_cta_repo">GitHub 源码与云端 .ipa ↗</a>
-          <button type="button" class="btn-ghost" command="show-modal" commandfor="arch-dialog" data-i18n="hero_cta_arch">Android → iOS 架构对照</button>
-        </div>
-
-        <ul class="hero-metrics" role="list">
-          <li><strong data-i18n="metric1_k">$0</strong><span data-i18n="metric1_v">开发者费用</span></li>
-          <li><strong data-i18n="metric2_k">SwiftUI</strong><span data-i18n="metric2_v">100% 原生 iOS/iPadOS App</span></li>
-          <li><strong data-i18n="metric3_k">v1 + v2</strong><span data-i18n="metric3_v">Android 数据无损互通</span></li>
-        </ul>
-      </div>
-
-      <!-- Interactive Native iPhone / iPad Simulator Preview -->
-      <div class="hero-stage">
-        <div class="stage-toolbar glass-pill">
-          <div class="device-tablist" role="tablist" aria-label="设备视角切换" focusgroup="tablist nomemory">
-            <button type="button" role="tab" id="tab-iphone" aria-selected="true" focusgroupstart data-device-target="iphone" data-i18n="dev_iphone">iPhone 原生界面</button>
-            <button type="button" role="tab" id="tab-ipad" aria-selected="false" data-device-target="ipad" data-i18n="dev_ipad">iPad 三栏分屏</button>
+    <main>
+      <!-- 00 / HERO POSTER & LIVE SWIFTUI SIMULATOR -->
+      <section class="swiss-band" aria-labelledby="hero-title">
+        <div class="hero-left span-6 reg-cell">
+          <div>
+            <p class="swiss-kicker">
+              <span class="kicker-index">00</span>
+              <span class="kicker-dot" aria-hidden="true"></span>
+              <span data-i18n="hero_kicker">ANDROID 1:1 PORT · SWIFTUI 26 LIQUID GLASS</span>
+            </p>
+            <h1 id="hero-title" class="hero-headline" tabindex="-1" data-i18n-html="hero_title">做计划，<br>说<span class="accent-phrase">大白话</span>。<br>忠实重构 iOS 应用。</h1>
+            <p class="hero-lead" data-i18n="hero_desc">严格遵循原版 Android 极简黑白哲学、6 大智能分组与 7 大 AI 草稿确认流，彻底以 SwiftUI 原生编写并融入 iOS 26 液态玻璃交互；新增全量本地导入导出、每日定时本地备份与数据金库，零 $99 开发者费用安装到 iPhone 与 iPad。</p>
           </div>
-          <button type="button" class="stage-reset" id="hero-reset-demo" aria-label="重置演示" title="重置演示">↻</button>
+
+          <div>
+            <div class="hero-cta-row">
+              <a class="btn-solid" href="#install"><span class="btn-label" data-i18n="hero_cta_install">ZERO-FEE iOS INSTALL ↓</span></a>
+              <a class="btn-outline" href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer"><span class="btn-label" data-i18n="hero_cta_repo">SWIFTUI REPO ↗</span></a>
+              <button type="button" class="btn-outline" command="show-modal" commandfor="arch-dialog"><span class="btn-label" data-i18n="hero_cta_arch">SPEC DIFF DIALOG</span></button>
+            </div>
+
+            <ul class="swiss-metrics" role="list">
+              <li>
+                <strong>$0.00</strong>
+                <span data-i18n="m1_label">ZERO DEVELOPER FEE</span>
+              </li>
+              <li>
+                <strong>16 / 16</strong>
+                <span data-i18n="m2_label">CORE UNIT TESTS PASS</span>
+              </li>
+              <li>
+                <strong>v1 + v2</strong>
+                <span data-i18n="m3_label">ANDROID JSON LOSSLESS</span>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <div class="device-panels">
-          <!-- iPhone Interactive Panel -->
-          <div class="device-panel" role="tabpanel" id="panel-iphone" aria-labelledby="tab-iphone">
-            <div class="iphone-frame glass-hardware">
-              <div class="iphone-bezel">
-                <div class="dynamic-island" aria-hidden="true"></div>
-                <div class="app-topbar">
-                  <span class="app-title">Pickplan</span>
-                  <div class="demo-topbar-actions">
-                    <button type="button" class="demo-icon-btn" id="demo-test-notif" aria-label="测试通知" title="测试通知">🔔</button>
-                    <button type="button" class="demo-icon-btn" id="demo-refresh" aria-label="刷新分组" title="刷新分组">↻</button>
-                    <span class="app-pill glass-pill" id="demo-progress-pill">1 / 3 完成</span>
+        <div class="hero-right span-6">
+          <div class="specimen-bar">
+            <div class="device-tablist" role="tablist" aria-label="Simulator viewport switch" focusgroup="tablist nomemory">
+              <button type="button" role="tab" id="tab-iphone" aria-selected="true" focusgroupstart data-device-target="iphone" data-i18n="dev_iphone">FIG.A / iPhone</button>
+              <button type="button" role="tab" id="tab-ipad" aria-selected="false" data-device-target="ipad" data-i18n="dev_ipad">FIG.B / iPad Split</button>
+            </div>
+            <button type="button" class="specimen-reset" id="hero-reset-demo" aria-label="Reset interactive simulator">↻</button>
+          </div>
+
+          <div class="tabs-panels-grid">
+            <!-- iPhone Native Apparatus -->
+            <div role="tabpanel" id="panel-iphone" aria-labelledby="tab-iphone">
+              <div class="panel-inner">
+                <div class="iphone-frame">
+                  <div class="iphone-bezel">
+                    <div class="dynamic-island" aria-hidden="true"></div>
+                    <div class="app-topbar">
+                      <span class="app-title">Pickplan</span>
+                      <div class="demo-topbar-actions">
+                        <button type="button" class="demo-icon-btn" id="demo-test-notif" aria-label="Send test local notification">🔔</button>
+                        <button type="button" class="demo-icon-btn" id="demo-refresh" aria-label="Refresh task sections">↻</button>
+                        <span class="app-pill" id="demo-progress-pill">1 / 3 完成</span>
+                      </div>
+                    </div>
+                    <div class="demo-progress-track" aria-hidden="true"><div class="demo-progress-fill" id="demo-progress-bar"></div></div>
+                    <p class="demo-toast-msg" id="demo-toast-msg" role="status"></p>
+
+                    <div id="demo-view-manual">
+                      <div class="demo-section-head" data-i18n="demo_today">今天 · 周二</div>
+                      <div id="demo-task-list" class="demo-task-list"></div>
+                      <div class="demo-quick-row">
+                        <label class="visually-hidden" for="demo-quick-input">输入新任务标题</label>
+                        <input type="text" id="demo-quick-input" placeholder="输入新任务标题…">
+                        <button type="button" id="demo-quick-add">+ 新任务</button>
+                      </div>
+                    </div>
+
+                    <div id="demo-view-ai" hidden>
+                      <div class="demo-section-head" data-i18n="demo_ai_head">✦ AI 整理计划</div>
+                      <div class="demo-ai-prompt" id="demo-ai-prompt">明天上午十点评审设计，下午三点回电客户</div>
+                      <p class="demo-ai-intro" data-i18n="demo_ai_intro">我先整理成草稿，请确认后再加入计划。</p>
+                      <div class="demo-ai-drafts" id="demo-ai-drafts"></div>
+                      <button type="button" class="demo-ai-apply" id="demo-ai-apply" data-i18n="demo_ai_apply">全部加入计划 +</button>
+                    </div>
+
+                    <div id="demo-view-vault" hidden>
+                      <div class="demo-section-head" data-i18n="demo_vault_head">⛁ 本地数据与备份</div>
+                      <div class="demo-vault-card">
+                        <div class="vault-mini-row"><span data-i18n="demo_auto_status">每日定时自动备份</span><strong>22:00 · ON</strong></div>
+                        <div class="vault-mini-row"><span data-i18n="demo_snap_count">本地快照数</span><strong id="demo-snap-count">2 份</strong></div>
+                        <button type="button" class="demo-snap-btn" id="demo-snap-now" data-i18n="demo_snap_now">立即生成快照</button>
+                        <p class="demo-snap-msg" id="demo-snap-msg" role="status"></p>
+                      </div>
+                    </div>
+
+                    <div class="demo-undo-bar" id="demo-undo-bar" hidden>
+                      <span id="demo-undo-text">已删除任务</span>
+                      <button type="button" class="demo-undo-btn" id="demo-undo-btn" data-i18n="demo_undo">撤销</button>
+                    </div>
+
+                    <div class="liquid-dock" role="tablist" aria-label="iOS native tabs simulator">
+                      <div class="dock-capsule">
+                        <button type="button" role="tab" aria-selected="true" data-demo-mode="manual" data-i18n="mode_manual">自己做</button>
+                        <button type="button" role="tab" aria-selected="false" data-demo-mode="ai" data-i18n="mode_ai">AI 帮做</button>
+                        <button type="button" role="tab" aria-selected="false" data-demo-mode="vault" data-i18n="mode_vault">本地数据</button>
+                      </div>
+                      <button type="button" class="dock-orb" id="demo-focus-add" aria-label="Focus new task input">+</button>
+                    </div>
                   </div>
                 </div>
-                <div class="demo-progress-track" aria-hidden="true"><div class="demo-progress-fill" id="demo-progress-bar"></div></div>
-                <p class="demo-toast-msg" id="demo-toast-msg" role="status"></p>
+              </div>
+            </div>
 
-                <div class="demo-view" id="demo-view-manual">
-                  <div class="demo-section-head" data-i18n="demo_today">今天 · 周二</div>
-                  <div id="demo-task-list" class="demo-task-list"></div>
-                  <div class="demo-quick-row">
-                    <input type="text" id="demo-quick-input" placeholder="输入新任务标题…" aria-label="快速输入待办">
-                    <button type="button" id="demo-quick-add" aria-label="添加任务">+ 新任务</button>
+            <!-- iPad 3-Column Specimen -->
+            <div role="tabpanel" id="panel-ipad" aria-labelledby="tab-ipad" hidden="until-found">
+              <div class="panel-inner">
+                <div class="ipad-frame">
+                  <div class="ipad-bezel">
+                    <aside class="ipad-col">
+                      <div class="ipad-brand">Pickplan · iPadOS</div>
+                      <button type="button" class="ipad-row is-active" data-ipad-filter="all"><span data-i18n="mode_manual">自己做</span><span id="ipad-count-all">3</span></button>
+                      <button type="button" class="ipad-row" data-ipad-filter="today"><span>今天 Today</span><span id="ipad-count-today">2</span></button>
+                      <button type="button" class="ipad-row" data-ipad-filter="vault"><span data-i18n="mode_vault">本地数据</span><span>22:00</span></button>
+                      <div class="ipad-shortcuts"><span>⌘N</span><span>⌘F</span><span>⌘B</span></div>
+                    </aside>
+                    <div class="ipad-col">
+                      <div class="demo-section-head">6 大分组 · 自己做</div>
+                      <div id="ipad-task-list" class="demo-task-list"></div>
+                    </div>
+                    <div class="ipad-col">
+                      <div class="demo-section-head">FOCUS &amp; VAULT</div>
+                      <div class="ipad-focus-ring" aria-hidden="true"><span>25:00</span></div>
+                      <p class="ipad-inspector-title" id="ipad-selected-title">评审 iOS 液态玻璃动效</p>
+                      <p class="ipad-inspector-sub">Native SplitView + SHA256 Backups</p>
+                      <a class="ipad-cta" href="#install" data-i18n="ipad_install_cta">安装 iPad App ↓</a>
+                    </div>
                   </div>
-                </div>
-
-                <div class="demo-view" id="demo-view-ai" hidden>
-                  <div class="demo-section-head" data-i18n="demo_ai_head">✦ AI 整理计划</div>
-                  <div class="demo-ai-prompt glass-surface" id="demo-ai-prompt">明天上午十点评审设计，下午三点回电客户</div>
-                  <p class="demo-ai-intro" data-i18n="demo_ai_intro">我先整理成草稿，请确认后再加入计划。</p>
-                  <div class="demo-ai-drafts" id="demo-ai-drafts"></div>
-                  <button type="button" class="demo-ai-apply" id="demo-ai-apply" data-i18n="demo_ai_apply">全部加入计划 +</button>
-                </div>
-
-                <div class="demo-view" id="demo-view-vault" hidden>
-                  <div class="demo-section-head" data-i18n="demo_vault_head">⛁ 本地数据与备份</div>
-                  <div class="demo-vault-card glass-surface">
-                    <div class="vault-mini-row"><span data-i18n="demo_auto_status">每日定时自动备份</span><strong>22:00 · ON</strong></div>
-                    <div class="vault-mini-row"><span data-i18n="demo_snap_count">本地快照数</span><strong id="demo-snap-count">2 份</strong></div>
-                    <button type="button" class="demo-snap-btn" id="demo-snap-now" data-i18n="demo_snap_now">立即生成快照</button>
-                    <p class="demo-snap-msg" id="demo-snap-msg" role="status"></p>
-                  </div>
-                </div>
-
-                <div class="demo-undo-bar glass-pill" id="demo-undo-bar" hidden>
-                  <span id="demo-undo-text">已删除任务</span>
-                  <button type="button" class="demo-undo-btn" id="demo-undo-btn" data-i18n="demo_undo">撤销</button>
-                </div>
-
-                <div class="liquid-dock" role="tablist" aria-label="原生应用标签模拟">
-                  <div class="dock-capsule glass-pill">
-                    <button type="button" role="tab" aria-selected="true" data-demo-mode="manual" data-i18n="mode_manual">自己做</button>
-                    <button type="button" role="tab" aria-selected="false" data-demo-mode="ai" data-i18n="mode_ai">AI 帮做</button>
-                    <button type="button" role="tab" aria-selected="false" data-demo-mode="vault" data-i18n="mode_vault">本地数据</button>
-                  </div>
-                  <button type="button" class="dock-orb glass-pill" id="demo-focus-add" aria-label="聚焦新建输入框">+</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- iPad Interactive Panel -->
-          <div class="device-panel" role="tabpanel" id="panel-ipad" aria-labelledby="tab-ipad" hidden="until-found">
-            <div class="ipad-frame glass-hardware">
-              <div class="ipad-bezel">
-                <aside class="ipad-col glass-surface">
-                  <div class="ipad-brand">Pickplan · iPadOS</div>
-                  <button type="button" class="ipad-row is-active" data-ipad-filter="all"><span data-i18n="mode_manual">自己做</span><span id="ipad-count-all">3</span></button>
-                  <button type="button" class="ipad-row" data-ipad-filter="today"><span>今天 Today</span><span id="ipad-count-today">2</span></button>
-                  <button type="button" class="ipad-row" data-ipad-filter="vault"><span data-i18n="mode_vault">本地数据</span><span>22:00</span></button>
-                  <div class="ipad-shortcuts"><span>⌘N</span><span>⌘F</span><span>⌘B</span></div>
-                </aside>
-                <div class="ipad-col glass-surface">
-                  <div class="demo-section-head">6 大分组 · 自己做</div>
-                  <div id="ipad-task-list" class="demo-task-list"></div>
-                </div>
-                <div class="ipad-col glass-surface ipad-inspector">
-                  <div class="demo-section-head">专注与快照检查器</div>
-                  <div class="ipad-focus-ring" aria-hidden="true"><span>25:00</span></div>
-                  <p class="ipad-inspector-title" id="ipad-selected-title">评审 iOS 液态玻璃动效</p>
-                  <p class="ipad-inspector-sub" id="ipad-selected-meta">支持 Stage Manager 多窗口、键盘导航与本地 .pickplan.json 一键导出。</p>
-                  <a class="btn-primary small-cta" href="#install" data-i18n="ipad_install_cta">安装 iPad 原生应用 ↓</a>
-                </div>
-              </div>
+          <p class="specimen-caption" data-i18n="stage_caption">SPECIMEN INTERACTIVE // 点击 🔔 测试推送、✕ 删除并撤销、逐条确认 AI 草稿或切换 iPad 三栏</p>
+        </div>
+      </section>
+
+      <!-- 01 / MOTION DOCUMENT -->
+      <section class="swiss-band" id="film" aria-labelledby="film-title">
+        <div class="section-header-cell span-12">
+          <div>
+            <p class="section-num">01</p>
+            <h2 id="film-title" class="section-title" data-i18n="film_title">MOTION DOCUMENT · 1080P 60FPS</h2>
+          </div>
+          <p class="section-aside" data-i18n="film_sub">从 Android 原版 900ms 暖白开屏到 iOS 26 液态玻璃手动流程、大白话草稿逐条加入、iPad 三栏协同与每日定时快照。</p>
+        </div>
+
+        <div class="cell span-4 film-specs reg-cell">
+          <div>
+            <p class="swiss-kicker"><span class="kicker-index">FILE</span> <span data-i18n="film_meta_head">PRODUCTION PARAMETERS</span></p>
+            <dl class="spec-dl">
+              <div><dt>FORMAT</dt><dd>MP4 / H.264 + AAC</dd></div>
+              <div><dt>RESOLUTION</dt><dd>1920 × 1080</dd></div>
+              <div><dt>FRAME RATE</dt><dd>60.00 FPS</dd></div>
+              <div><dt>DURATION</dt><dd>36.00 SEC</dd></div>
+              <div><dt>PAYLOAD</dt><dd>4.18 MB</dd></div>
+            </dl>
+          </div>
+          <a class="btn-solid" href="/assets/pickplan-ios-intro.mp4" download="pickplan-ios-intro.mp4">
+            <span class="btn-label" data-i18n="vid_dl">DOWNLOAD MP4 (4.18 MB) ↓</span>
+          </a>
+        </div>
+
+        <div class="cell span-8">
+          <video id="intro-video" class="cinema-player" poster="/assets/video-poster.jpg" playsinline preload="metadata">
+            <source src="/assets/pickplan-ios-intro.mp4" type="video/mp4">
+          </video>
+
+          <div class="cinema-controls">
+            <button type="button" class="cinema-btn" id="vid-play" aria-label="Play or pause product film">▶</button>
+            <div class="chapter-pills" role="group" aria-label="Film chapters">
+              <button type="button" data-seek="0" class="is-active" data-i18n="ch1">01 初心</button>
+              <button type="button" data-seek="6.2" data-i18n="ch2">02 原生重构</button>
+              <button type="button" data-seek="13.2" data-i18n="ch3">03 草稿确认</button>
+              <button type="button" data-seek="20.2" data-i18n="ch4">04 iPhone/iPad</button>
+              <button type="button" data-seek="26.2" data-i18n="ch5">05 本地备份</button>
+            </div>
+            <div class="cinema-right">
+              <label class="visually-hidden" for="vid-seek">Video timeline position</label>
+              <input type="range" id="vid-seek" min="0" max="36" step="0.1" value="0">
+              <button type="button" class="cinema-btn" id="vid-mute" aria-label="Mute or unmute audio">🔊</button>
+              <button type="button" class="cinema-btn" id="vid-fs" aria-label="Fullscreen playback">⛶</button>
             </div>
           </div>
+
+          <details class="film-transcript">
+            <summary data-i18n="vid_transcript_btn">SCENE TRANSCRIPT / 影片分镜文字实录 (00:00 – 00:36)</summary>
+            <ol>
+              <li data-i18n="tr1">00:00 — 暖白开屏与手绘标语：做计划，说大白话；忠实移植 Android 原版。</li>
+              <li data-i18n="tr2">00:06 — iPhone SwiftUI 液态玻璃工作台：🔔 通知、↻ 刷新、+ 新任务与 Undo 撤销条。</li>
+              <li data-i18n="tr3">00:13 — AI 帮做草稿流：「我先整理成草稿，请确认后再加入计划」，支持逐条编辑或加入。</li>
+              <li data-i18n="tr4">00:20 — iPad 三栏 NavigationSplitView、快捷键 (⌘N / ⌘F / ⌘B) 与 25:00 专注计时。</li>
+              <li data-i18n="tr5">00:26 — 本地数据金库：每日 22:00 定时自动快照、Files 文件夹互通与 SideStore / Xcode 免签安装。</li>
+            </ol>
+          </details>
         </div>
-        <p class="stage-caption" data-i18n="stage_caption">原生 iOS / iPadOS 界面交互预览 · 在上方测试 🔔 本地通知、点删撤销、AI 草稿单条确认或切换 iPad 视图</p>
-      </div>
-    </section>
+      </section>
 
-    <!-- FILM SHOWCASE -->
-    <section class="film-section wrap reveal-block" id="film" aria-labelledby="film-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow"><span class="signal" aria-hidden="true"></span> 01 / PRODUCT FILM · 1080P 60FPS</p>
-          <h2 id="film-title" data-i18n-html="film_title">36 秒看见，<br>光影与计划的流动。</h2>
-        </div>
-        <p class="section-sub" data-i18n="film_sub">从 Android 原版暖白呼吸开屏到 iOS 26 曜黑液态玻璃、大白话草稿逐条编辑加入、iPad 三栏分屏与本地定时自动备份。</p>
-      </div>
-
-      <div class="cinema-frame glass-surface">
-        <video id="intro-video" class="cinema-video" poster="/assets/video-poster.jpg" playsinline preload="metadata">
-          <source src="/assets/pickplan-ios-intro.mp4" type="video/mp4">
-        </video>
-
-        <div class="cinema-controls glass-pill">
-          <button type="button" class="cinema-btn" id="vid-play" aria-label="播放或暂停">▶</button>
-          <div class="chapter-pills" role="group" aria-label="影片章节">
-            <button type="button" data-seek="0" class="is-active" data-i18n="ch1">01 初心</button>
-            <button type="button" data-seek="6.2" data-i18n="ch2">02 原生重构</button>
-            <button type="button" data-seek="13.2" data-i18n="ch3">03 草稿确认</button>
-            <button type="button" data-seek="20.2" data-i18n="ch4">04 iPhone/iPad</button>
-            <button type="button" data-seek="26.2" data-i18n="ch5">05 本地备份</button>
+      <!-- 02 / MODULAR SYSTEM ARCHITECTURE (SUBGRID) -->
+      <section class="swiss-band" id="architecture" aria-labelledby="arch-title">
+        <div class="section-header-cell span-12">
+          <div>
+            <p class="section-num">02</p>
+            <h2 id="arch-title" class="section-title" data-i18n="arch_sec_title">MODULAR NATIVE ARCHITECTURE</h2>
           </div>
-          <div class="cinema-right">
-            <input type="range" id="vid-seek" min="0" max="36" step="0.1" value="0" aria-label="视频进度">
-            <button type="button" class="cinema-btn" id="vid-mute" aria-label="静音或取消静音">🔊</button>
-            <button type="button" class="cinema-btn" id="vid-fs" aria-label="全屏播放">⛶</button>
-            <a class="cinema-dl" href="/assets/pickplan-ios-intro.mp4" download="pickplan-ios-intro.mp4" data-i18n="vid_dl">下载 MP4 ↓</a>
+          <p class="section-aside" data-i18n="arch_sec_sub">零网页套壳，零 Flutter 运行时开销；围绕 Swift 6 Concurrency、SwiftUI 26 与 CryptoKit 重建六个正交模块。</p>
+        </div>
+
+        <div class="modules-grid">
+          <article class="module-card">
+            <span class="module-index">MOD. 2.1</span>
+            <h3 data-i18n="mod1_t">900ms 呼吸开屏 &amp; 单色液态玻璃</h3>
+            <p data-i18n="mod1_p">精确复现原版 #FFFFFF 暖白开屏与真实 pickplanlogo.jpg，平滑接入纯黑 #000000 玻璃材质；iOS 26 激活 GlassEffectContainer，iOS 17–18 自动降级材质。</p>
+            <span class="swiss-tag">LiquidGlassTheme.swift</span>
+          </article>
+
+          <article class="module-card">
+            <span class="module-index">MOD. 2.2</span>
+            <h3 data-i18n="mod2_t">自己做：6 大时间分组与单指点删</h3>
+            <p data-i18n="mod2_p">严格对齐已逾期、今天、明天、之后、无时间、已完成 6 大分组；保留圆角复选框、珊瑚红截止角标、+ 新任务悬浮胶囊与底部 Undo 撤销条。</p>
+            <span class="swiss-tag">ManualPlanView.swift</span>
+          </article>
+
+          <article class="module-card">
+            <span class="module-index">MOD. 2.3</span>
+            <h3 data-i18n="mod3_t">AI 帮做：7 大预设 + 逐条草稿确认</h3>
+            <p data-i18n="mod3_p">保留 DeepSeek / Kimi / 通义千问 / 智谱 GLM / SiliconFlow / OpenAI / Custom 与 GET /models 测试；拆出草稿可单独「编辑」「加入」，另附离线本地拆解器。</p>
+            <span class="swiss-tag">AIPlanBuilderView.swift</span>
+          </article>
+
+          <article class="module-card">
+            <span class="module-index">MOD. 2.4</span>
+            <h3 data-i18n="mod4_t">双时间通知 &amp; 前台弹窗直显</h3>
+            <p data-i18n="mod4_p">同一待办分别注册 Reminder 与 Deadline 两条本地通知；通过 UNUserNotificationCenterDelegate 实现前台展示，并提供顶部 🔔 一键测试推送。</p>
+            <span class="swiss-tag">NotificationCoordinator.swift</span>
+          </article>
+
+          <article class="module-card">
+            <span class="module-index">MOD. 2.5</span>
+            <h3 data-i18n="mod5_t">iPadOS 三栏分屏与键鼠协同</h3>
+            <p data-i18n="mod5_p">左侧智能导航与备份状态、中间任务流、右侧详情与 25 分钟专注番茄钟；支持 ⌘N / ⌘F / ⌘B 快捷键、Split View 与 Stage Manager。</p>
+            <span class="swiss-tag">AdaptiveWorkspaceView.swift</span>
+          </article>
+
+          <article class="module-card">
+            <span class="module-index">MOD. 2.6</span>
+            <h3 data-i18n="mod6_t">本地导入导出 &amp; 每日定时自动备份</h3>
+            <p data-i18n="mod6_p">CryptoKit SHA256 v2 信封、Android v1 数组无损导入、每日备份时间选择器、快照内任务预览、置顶保护与系统「文件 App」同步。</p>
+            <span class="swiss-tag">LocalVaultStore.swift</span>
+          </article>
+        </div>
+      </section>
+
+      <!-- 03 / SPECIFICATION MATRIX (RESPONSIVE TABLE) -->
+      <section class="swiss-band" id="matrix" aria-labelledby="matrix-title">
+        <div class="section-header-cell span-12">
+          <div>
+            <p class="section-num">03</p>
+            <h2 id="matrix-title" class="section-title" data-i18n="matrix_title">ANDROID → iOS FIDELITY MATRIX</h2>
           </div>
+          <p class="section-aside" data-i18n="matrix_sub">基于 smartlotus/pickplan（main + wip/monorepo-migration）逐字段与交互核对清单。</p>
         </div>
-      </div>
-    </section>
 
-    <!-- BENTO GRID FEATURES -->
-    <section class="bento-section wrap reveal-block" id="features" aria-labelledby="bento-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow"><span class="signal" aria-hidden="true"></span> 02 / LESS, BUT LIQUID</p>
-          <h2 id="bento-title" data-i18n-html="bento_title">忠实还原 Android 核心，<br>重塑原生液态玻璃质感。</h2>
+        <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="spec-table-caption">
+          <table class="spec-table" id="spec-table">
+            <caption id="spec-table-caption" data-i18n="spec_caption">TABLE 3.1 // CROSS-PLATFORM PARITY &amp; ENHANCEMENT AUDIT</caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="th_1">SUBSYSTEM</th>
+                <th scope="col" data-i18n="th_2">ANDROID ORIGINAL</th>
+                <th scope="col" data-i18n="th_3">iOS &amp; iPadOS 26 NATIVE</th>
+                <th scope="col" data-i18n="th_4">VERIFICATION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" data-i18n="row1_k">Visual &amp; Splash</th>
+                <td data-i18n="row1_a">#FFFFFF 900ms 呼吸开屏 + 纯黑卡片 #1E1E1E / #CF6679</td>
+                <td data-i18n="row1_i">忠实还原开屏与色阶，叠加 GlassEffectContainer 与 iOS 17–18 材质降级</td>
+                <td data-i18n="row1_v">swift build 0 warnings</td>
+              </tr>
+              <tr>
+                <th scope="row" data-i18n="row2_k">Smart Sections</th>
+                <td data-i18n="row2_a">已逾期 / 今天 / 明天 / 之后 / 无时间 / 已完成</td>
+                <td data-i18n="row2_i">1:1 保持 6 分组及快捷键时间芯片（明日下午固定 15:00）</td>
+                <td data-i18n="row2_v">SmartSectionEngineTests</td>
+              </tr>
+              <tr>
+                <th scope="row" data-i18n="row3_k">AI Draft Flow</th>
+                <td data-i18n="row3_a">7 大预设 + GET /models 检测 + 草稿单条编辑与加入</td>
+                <td data-i18n="row3_i">保留全套 BYOK 协议与草稿确认 UI，新增离线双语大白话拆解</td>
+                <td data-i18n="row3_v">Test #16 Passed</td>
+              </tr>
+              <tr>
+                <th scope="row" data-i18n="row4_k">Notifications</th>
+                <td data-i18n="row4_a">Reminder &amp; Deadline 双推送 + 顶部 🔔 立即测试</td>
+                <td data-i18n="row4_i">UNUserNotificationCenter 前台横幅代理 + 未授权弹窗引导设置</td>
+                <td data-i18n="row4_v">NotificationCoordinator</td>
+              </tr>
+              <tr>
+                <th scope="row" data-i18n="row5_k">Local Backup</th>
+                <td data-i18n="row5_a">仅存 SharedPreferences，无导出与定时保护</td>
+                <td data-i18n="row5_i">SHA256 v2 导入导出 + 每日定时备份时间 + 快照任务预览 + Android v1 导入</td>
+                <td data-i18n="row5_v">BackupCodec Tests</td>
+              </tr>
+              <tr>
+                <th scope="row" data-i18n="row6_k">Zero-Fee Install</th>
+                <td data-i18n="row6_a">APK 直装</td>
+                <td data-i18n="row6_i">无 $99 年费权限，支持 SideStore / LiveContainer / Sideloadly / Xcode 个人团队</td>
+                <td data-i18n="row6_v">PickPlan.xcodeproj + CI</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <p class="section-sub" data-i18n="bento_sub">不是套壳网页，而是按原版 Android 代码逐模块重写的纯血 SwiftUI 应用，专为 iOS / iPadOS 优化手感与动效。</p>
-      </div>
+      </section>
 
-      <ul class="bento-grid" role="list">
-        <li class="bento-card bento-wide glass-surface">
-          <span class="card-num">01</span>
-          <h3 data-i18n="f1_t">Android 1:1 手动模式 &amp; 液态玻璃胶囊</h3>
-          <p data-i18n="f1_p">完整还原暖白 900ms 呼吸开屏、🔔 一键测试本地通知（未授权弹窗引导）、↻ 刷新 Toast、6 大时间分组（已逾期/今天/明天/之后/无时间/已完成）、单点删除与玻璃 Undo 撤销条。</p>
-          <span class="card-tag">SWIFTUI 26 · .glassEffect(.regular.interactive())</span>
-        </li>
-        <li class="bento-card glass-surface">
-          <span class="card-num">02</span>
-          <h3 data-i18n="f2_t">7 大 AI 预设 · 逐条编辑加入</h3>
-          <p data-i18n="f2_p">保留 DeepSeek / Kimi / 通义千问 / 智谱 GLM / SiliconFlow / OpenAI / Custom 与 GET /models 连接测试；拆出草稿可单独「编辑」「加入」或「全部加入计划」，另附无网本地解析器。</p>
-          <span class="card-tag">BYOK + ON-DEVICE PARSER</span>
-        </li>
-        <li class="bento-card glass-surface">
-          <span class="card-num">03</span>
-          <h3 data-i18n="f3_t">iPad 三栏分屏与键盘快捷键</h3>
-          <p data-i18n="f3_p">原生 NavigationSplitView 左侧智能分组与状态概览、中间任务流、右侧详情与 25 分钟专注番茄钟；支持 ⌘N / ⌘F / ⌘B 与 Stage Manager。</p>
-          <span class="card-tag">IPADOS NAVIGATION SPLIT VIEW</span>
-        </li>
-        <li class="bento-card glass-surface">
-          <span class="card-num">04</span>
-          <h3 data-i18n="f4_t">快捷时间芯片 + 双通知引擎</h3>
-          <p data-i18n="f4_p">还原今晚、明早、明天下午(15:00)、下周一、1 小时后快捷芯片与提醒/截止双时间通知调度（UNUserNotificationCenter），额外扩展可折叠子任务与专注计时。</p>
-          <span class="card-tag">UNUSERNOTIFICATIONCENTER</span>
-        </li>
-        <li class="bento-card bento-wide glass-surface">
-          <span class="card-num">05</span>
-          <h3 data-i18n="f5_t">全量本地导入导出、定时备份与数据管理</h3>
-          <p data-i18n="f5_p">支持每日定时备份时间设置、每小时/6h/每日/每周周期与切后台自动快照、快照内任务预览与一键回滚、置顶保护、存储占用统计、清理已完成与去重。</p>
-          <span class="card-tag">SHA256 VAULT · FILES APP SYNC</span>
-        </li>
-      </ul>
-    </section>
+      <!-- 04 / LOCAL DATA VAULT -->
+      <section class="swiss-band" id="vault" aria-labelledby="vault-title">
+        <div class="section-header-cell span-12">
+          <div>
+            <p class="section-num">04</p>
+            <h2 id="vault-title" class="section-title" data-i18n="vault_title">LOCAL DATA SOVEREIGNTY</h2>
+          </div>
+          <p class="section-aside" data-i18n="vault_sub">无云端服务器，无账号系统；所有待办、备份与快照通过 Files App 与本机金库完全掌控在你手中。</p>
+        </div>
 
-    <!-- DATA VAULT & SOVEREIGNTY -->
-    <section class="vault-section wrap reveal-block" id="vault" aria-labelledby="vault-title">
-      <div class="vault-layout glass-surface">
-        <div class="vault-copy">
-          <p class="eyebrow"><span class="signal" aria-hidden="true"></span> 03 / DATA SOVEREIGNTY</p>
-          <h2 id="vault-title" data-i18n-html="vault_title">你的待办与备份，<br>只留在你的设备里。</h2>
-          <p data-i18n="vault_p">不设服务器、不搞会员云同步，也不受 7 天免费侧载证书过期威胁。开启「定时自动本地备份」后，原生 App 会按设定时刻把带校验的 .pickplan.json 信封写入系统「文件 App → Pickplan → Backups」。</p>
+        <div class="cell span-6 reg-cell">
+          <p data-i18n="vault_p">开启「定时自动本地备份」并设定每日首选备份时刻后，App 会在后台或周期触发时写入带 CryptoKit SHA256 校验的 .pickplan.json 信封至系统「文件」App（UIFileSharingEnabled）。即便免费签名 7 天重签，所有数据依然毫发无损。</p>
           <ul class="vault-list" role="list">
-            <li data-i18n="v_li1">✓ 无损导入原版 Android Pickplan v1 JSON 数组</li>
-            <li data-i18n="v_li2">✓ 覆盖导入前自动生成 .safetyPreRestore 安全回滚快照，且可预览快照内任务列表</li>
-            <li data-i18n="v_li3">✓ 导出可读 Markdown 与可选脱敏（隐藏 API Key）的 .pickplan.json</li>
+            <li data-i18n="v_li1">01 / 导入：支持 Android v1 JSON 数组与 v2 校验信封（智能合并 / 追加 / 安全覆盖）</li>
+            <li data-i18n="v_li2">02 / 定时：支持按小时 / 天 / 周频率 + 指定每日备份时刻 + 置顶快照永久免轮转清理</li>
+            <li data-i18n="v_li3">03 / 管理：App 内直接预览历史快照内的待办详情、字节存储分析、清理已完成与去重</li>
           </ul>
-          <div class="vault-actions">
-            <button type="button" class="btn-glass glass-pill" command="show-modal" commandfor="schema-dialog" data-i18n="vault_schema_btn">预览 .pickplan.json v2 格式</button>
-            <a class="btn-primary" href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer" data-i18n="vault_open_btn">查看 LocalVaultStore 源码 ↗</a>
+          <div class="hero-cta-row" style="margin-block-end:0">
+            <button type="button" class="btn-outline" command="show-modal" commandfor="schema-dialog"><span class="btn-label" data-i18n="vault_schema_btn">INSPECT .PICKPLAN.JSON</span></button>
+            <a class="btn-solid" href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer"><span class="btn-label" data-i18n="vault_open_btn">LOCALVAULTSTORE.SWIFT ↗</span></a>
           </div>
         </div>
-        <div class="vault-telemetry">
-          <div class="telemetry-card glass-pill">
-            <span class="mono-label">LOCAL VAULT TELEMETRY</span>
-            <pre class="schema-snippet"><code>{
+
+        <div class="cell span-6">
+          <p class="swiss-kicker"><span class="kicker-index">SCHEMA</span> V2 ENVELOPE SPECIFICATION</p>
+          <pre class="vault-code-block"><code>{
   "format": "pickplan-backup",
   "schemaVersion": 2,
-  "checksum": "sha256:9f82c1...e4b1",
+  "exportedAt": "2026-11-17T22:00:00Z",
+  "checksum": "sha256:9f82c1d8...e4b1",
   "payload": {
     "todos": [ ... ],
-    "aiSettings": { "apiKey": null },
+    "aiSettings": {
+      "providerName": "DeepSeek",
+      "apiKey": null
+    },
     "preferences": {
       "backupPolicy": {
         "isEnabled": true,
         "intervalHours": 24,
         "preferredHour": 22,
+        "preferredMinute": 0,
         "maxSnapshots": 15
       }
     }
   }
 }</code></pre>
+        </div>
+      </section>
+
+      <!-- 05 / ZERO-$99 NATIVE ACQUISITION -->
+      <section class="swiss-band" id="install" aria-labelledby="install-title">
+        <div class="section-header-cell span-12">
+          <div>
+            <p class="section-num">05</p>
+            <h2 id="install-title" class="section-title" data-i18n="install_title">ZERO-$99 NATIVE INSTALLATION</h2>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- INSTALL NATIVE IPA WITHOUT $99 -->
-    <section class="install-section wrap reveal-block" id="install" aria-labelledby="install-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow"><span class="signal" aria-hidden="true"></span> 04 / ZERO APPLE DEVELOPER FEE</p>
-          <h2 id="install-title" data-i18n-html="install_title">不用花 $99，<br>三种原生装机方式上手 iPhone / iPad。</h2>
-        </div>
-        <p class="section-sub" data-i18n="install_sub">无 App Store 年费、无付费权限依赖，本机免 Xcode 也能由 GitHub Actions 云端免费编译出原生 .ipa 安装包。</p>
-      </div>
-
-      <div class="install-card glass-surface">
-        <div class="install-tablist" role="tablist" aria-label="原生安装方式选择" focusgroup="tablist nomemory">
-          <button type="button" role="tab" id="inst-tab-sidestore" aria-selected="true" focusgroupstart data-install-target="sidestore" data-i18n="inst_1">① SideStore / AltStore 无线侧载 .ipa（推荐）</button>
-          <button type="button" role="tab" id="inst-tab-sideloadly" aria-selected="false" data-install-target="sideloadly" data-i18n="inst_2">② Sideloadly / 爱思助手 安装 .ipa</button>
-          <button type="button" role="tab" id="inst-tab-xcode" aria-selected="false" data-install-target="xcode" data-i18n="inst_3">③ Xcode 免费个人 Apple ID 源码直装</button>
+          <p class="section-aside" data-i18n="install_sub">无需付费 Apple Developer 账号。无 Mac/Xcode 环境也可使用仓库内置 GitHub Actions 模板云端编译 .ipa。</p>
         </div>
 
-        <div class="install-panels">
-          <div class="install-panel" role="tabpanel" id="inst-panel-sidestore" aria-labelledby="inst-tab-sidestore">
-            <div class="panel-inner">
+        <div class="install-tablist" role="tablist" aria-label="Native iOS install methods" focusgroup="tablist nomemory">
+          <button type="button" role="tab" id="inst-tab-sidestore" aria-selected="true" focusgroupstart data-install-target="sidestore" data-i18n="inst_1">01 / SideStore 无线侧载 .ipa</button>
+          <button type="button" role="tab" id="inst-tab-sideloadly" aria-selected="false" data-install-target="sideloadly" data-i18n="inst_2">02 / 云端 .ipa + Sideloadly</button>
+          <button type="button" role="tab" id="inst-tab-xcode" aria-selected="false" data-install-target="xcode" data-i18n="inst_3">03 / Xcode 个人免费账号编译</button>
+        </div>
+
+        <div class="install-panels-wrap">
+          <div role="tabpanel" id="inst-panel-sidestore" aria-labelledby="inst-tab-sidestore">
+            <div class="install-inner">
               <h3 data-i18n="side_h">SideStore / LiveContainer 无线侧载与手机端续签</h3>
-              <p data-i18n="side_p">在装有 Xcode 的 Mac 运行打包脚本（或在 GitHub Actions 开启 docs/ci/build-unsigned-ipa.yml 云端构建）取得 PickPlan-Unsigned.ipa。导入 SideStore 后搭配 StosVPN 即可每 7 天在手机本地无线续签；放入 LiveContainer 更可突破免费账号 3 应用上限。</p>
+              <p data-i18n="side_p">取得 PickPlan-Unsigned.ipa 后直接导入 SideStore 搭配 StosVPN，每 7 天直接在 iPhone / iPad 无线点击续签（首次配对后无需电脑）；导入 LiveContainer 还可突破免费账号最多 3 个应用的限制。</p>
               <div class="code-row">
                 <code id="code-side">git clone https://github.com/smartlotus/pickplan-ios.git
 cd pickplan-ios
-./scripts/build_unsigned_ipa.sh
-# 输出: build/PickPlan-Unsigned.ipa</code>
+./scripts/build_unsigned_ipa.sh</code>
                 <span class="copy">
-                  <button type="button" class="copy-button" command="--copy" commandfor="code-side" aria-label="复制 IPA 打包命令">
-                    <span class="copy-icon" aria-hidden="true">复制命令 ⧉</span>
-                  </button>
+                  <button type="button" class="copy-button" command="--copy" commandfor="code-side" aria-label="COPY Local IPA build commands">COPY ⧉</button>
                   <span class="tip" role="status"></span>
                 </span>
               </div>
-              <a class="btn-primary" href="https://github.com/smartlotus/pickplan-ios/blob/main/SIDELOAD_GUIDE.md" target="_blank" rel="noopener noreferrer" data-i18n="side_go">阅读完整免 $99 装机攻略 ↗</a>
+              <div>
+                <a class="btn-solid" href="https://github.com/smartlotus/pickplan-ios/blob/main/SIDELOAD_GUIDE.md" target="_blank" rel="noopener noreferrer"><span class="btn-label" data-i18n="side_go">FULL SIDELOAD GUIDE ↗</span></a>
+              </div>
             </div>
           </div>
 
-          <div class="install-panel" role="tabpanel" id="inst-panel-sideloadly" aria-labelledby="inst-tab-sideloadly" hidden="until-found">
-            <div class="panel-inner">
-              <h3 data-i18n="sly_h">本机无 Xcode？用 GitHub Actions 云端免费构建 + Sideloadly 安装</h3>
-              <p data-i18n="sly_p">如果本地 Mac 未安装完整 Xcode，只需把仓库内 docs/ci/build-unsigned-ipa.yml 放到 .github/workflows/，GitHub 免费 macOS Runner 会自动编译测试并输出 PickPlan-Unsigned.ipa；随后在 Windows 或 Mac 上拖入 Sideloadly / 爱思助手 签名装入设备。</p>
+          <div role="tabpanel" id="inst-panel-sideloadly" aria-labelledby="inst-tab-sideloadly" hidden="until-found">
+            <div class="install-inner">
+              <h3 data-i18n="sly_h">本机无 Xcode？启用 GitHub Actions 免费 macOS 构建 `.ipa`</h3>
+              <p data-i18n="sly_p">将仓库内 docs/ci/build-unsigned-ipa.yml 移入 .github/workflows/ 并推送，GitHub 免费 macOS-26 Runner 会自动编译测试并输出 PickPlan-Unsigned.ipa Artifact，再用 Windows/Mac 上的 Sideloadly 或爱思助手签发安装。</p>
               <div class="code-row">
                 <code id="code-ci">gh auth refresh -h github.com -s workflow
 mkdir -p .github/workflows
 cp docs/ci/build-unsigned-ipa.yml .github/workflows/
 git add .github/workflows &amp;&amp; git commit -m "Enable cloud IPA build" &amp;&amp; git push</code>
                 <span class="copy">
-                  <button type="button" class="copy-button" command="--copy" commandfor="code-ci" aria-label="复制云端工作流命令">
-                    <span class="copy-icon" aria-hidden="true">复制命令 ⧉</span>
-                  </button>
+                  <button type="button" class="copy-button" command="--copy" commandfor="code-ci" aria-label="COPY GitHub Actions workflow commands">COPY ⧉</button>
                   <span class="tip" role="status"></span>
                 </span>
               </div>
             </div>
           </div>
 
-          <div class="install-panel" role="tabpanel" id="inst-panel-xcode" aria-labelledby="inst-tab-xcode" hidden="until-found">
-            <div class="panel-inner">
+          <div role="tabpanel" id="inst-panel-xcode" aria-labelledby="inst-tab-xcode" hidden="until-found">
+            <div class="install-inner">
               <h3 data-i18n="xcode_h">Xcode 免费 Personal Team 直装真机 &amp; 运行全部单元测试</h3>
-              <p data-i18n="xcode_p">在 Xcode 中打开 PickPlan.xcodeproj，将 Signing Team 设为免费 Personal Team 并修改 Bundle Identifier，连接 iPhone / iPad 点击 ⌘R 即刻真机运行；亦可运行 Swift 6 Package 与全部 16 项核心测试。</p>
+              <p data-i18n="xcode_p">在任意 Mac 用 Xcode 打开 PickPlan.xcodeproj，Signing Team 选个人免费 Apple ID 并修改 Bundle Identifier 后，连接 iPhone / iPad 按 ⌘R 即可真机安装。</p>
               <div class="code-row">
                 <code id="code-xcode">git clone https://github.com/smartlotus/pickplan-ios.git
 cd pickplan-ios
 swift build &amp;&amp; ./scripts/run_tests.sh
 open PickPlan.xcodeproj</code>
                 <span class="copy">
-                  <button type="button" class="copy-button" command="--copy" commandfor="code-xcode" aria-label="复制 Xcode 测试命令">
-                    <span class="copy-icon" aria-hidden="true">复制命令 ⧉</span>
-                  </button>
+                  <button type="button" class="copy-button" command="--copy" commandfor="code-xcode" aria-label="COPY Xcode test and open commands">COPY ⧉</button>
                   <span class="tip" role="status"></span>
                 </span>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
 
-  <footer class="site-footer wrap">
-    <div class="footer-wordmark" aria-hidden="true">Pickplan.</div>
-    <div class="footer-meta">
-      <span>© 2026 smartlotus · MIT License</span>
-      <span data-i18n="footer_slogan">做计划，说大白话 · 原生 iOS &amp; iPadOS 液态玻璃版</span>
-      <div class="footer-links">
-        <a href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer">iOS App Repo ↗</a>
-        <a href="https://github.com/smartlotus/pickplan-ios-website" target="_blank" rel="noopener noreferrer">Showcase Repo ↗</a>
-        <a href="https://github.com/smartlotus/pickplan" target="_blank" rel="noopener noreferrer">Android Original ↗</a>
+    <!-- COLOPHON FOOTER -->
+    <footer class="swiss-footer">
+      <div class="footer-wordmark" aria-hidden="true">PICKPLAN.</div>
+      <div class="footer-bar">
+        <span>© 2026 SMARTLOTUS · MIT LICENSE · INTERNATIONAL TYPOGRAPHIC SPECIFICATION</span>
+        <span data-i18n="footer_slogan">做计划，说大白话 · 原生 iOS &amp; iPadOS 液态玻璃版</span>
+        <div class="footer-links">
+          <a href="https://github.com/smartlotus/pickplan-ios" target="_blank" rel="noopener noreferrer">iOS App Repo ↗</a>
+          <a href="https://github.com/smartlotus/pickplan-ios-website" target="_blank" rel="noopener noreferrer">Website Repo ↗</a>
+          <a href="https://github.com/smartlotus/pickplan" target="_blank" rel="noopener noreferrer">Android Original ↗</a>
+        </div>
       </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 
-  <!-- Architecture Comparison Modal -->
-  <dialog id="arch-dialog" class="glass-dialog" closedby="any" aria-labelledby="arch-dialog-title">
+  <!-- NATIVE MODAL: ARCHITECTURE COMPARISON -->
+  <dialog id="arch-dialog" class="swiss-dialog" closedby="any" aria-labelledby="arch-dialog-title">
     <div class="dialog-header">
-      <h2 id="arch-dialog-title" data-i18n="arch_t">Pickplan Android → iOS/iPadOS 原生移植对照</h2>
-      <button type="button" class="dialog-close" command="close" commandfor="arch-dialog" aria-label="关闭窗口">✕</button>
+      <h2 id="arch-dialog-title" data-i18n="arch_t">ANDROID → iOS ARCHITECTURE DIFF</h2>
+      <button type="button" class="dialog-close" command="close" commandfor="arch-dialog" aria-label="Close specification diff dialog">✕</button>
     </div>
     <div class="dialog-body">
-      <p data-i18n="arch_intro">在深入分析原仓库 main 与 wip/monorepo-migration 分支后，原生 SwiftUI 版完整还原核心操作流并进化如下：</p>
+      <p data-i18n="arch_intro">在完整阅读原仓库 main 与 wip/monorepo-migration 后，原生 SwiftUI 版 1:1 复原并升级了以下 4 个核心层次：</p>
       <ul class="dialog-list" role="list">
-        <li data-i18n-html="arch_1"><strong>1:1 视觉与手势还原：</strong>保留暖白 900ms 呼吸开屏（pickplanlogo.jpg）、纯黑高对比卡片、🔔 测试推送、↻ 刷新 Toast 与单点删除 Undo，并升级为 SwiftUI 26 GlassEffectContainer。</li>
-        <li data-i18n-html="arch_2"><strong>iPhone 与 iPad 双端原生：</strong>iPhone 采用三态悬浮液态玻璃胶囊 + + 新任务悬浮 Pill；iPad 采用三栏 NavigationSplitView + 键盘快捷键 + 专注计时检查器。</li>
-        <li data-i18n-html="arch_3"><strong>AI 引擎与逐条确认：</strong>完整保留 7 大 AI 预设与 GET /models 检测，支持每张草稿单独「编辑」「加入」及无网离线大白话解析。</li>
-        <li data-i18n-html="arch_4"><strong>本地数据主权：</strong>从 SharedPreferences 升级为 CryptoKit SHA256 本地金库，支持每日定时备份时刻、快照任务预览、Files 文件夹互通与 Android v1 导入。</li>
+        <li data-i18n-html="arch_1"><strong>01 / 视觉与开屏：</strong>保留 900ms 暖白开屏与纯黑高对比界面，新增 Xcode 26 GlassEffectContainer 与 iOS 17–18 自动材质降级。</li>
+        <li data-i18n-html="arch_2"><strong>02 / 交互与双端：</strong>保留 🔔 测试通知、↻ 刷新 Toast、6 大时间分组、+ 新任务与 Undo 撤销条，并在 iPadOS 展开三栏 NavigationSplitView。</li>
+        <li data-i18n-html="arch_3"><strong>03 / 大白话 AI 流：</strong>完整保留 7 大厂商模型预设、GET /models 探测、每条草稿单独编辑确认与离线自然语言解析器。</li>
+        <li data-i18n-html="arch_4"><strong>04 / 数据金库：</strong>新增 SHA256 v2 导入导出、Android v1 JSON 无损导入、每日备份时间计划及快照内部待办预览。</li>
       </ul>
     </div>
     <div class="dialog-footer">
-      <button type="button" class="btn-primary" command="close" commandfor="arch-dialog" autofocus data-i18n="dialog_ok">明白了</button>
+      <button type="button" class="btn-solid" command="close" commandfor="arch-dialog" autofocus data-i18n="dialog_ok">CLOSE [ESC]</button>
     </div>
   </dialog>
 
-  <!-- Schema Preview Modal -->
-  <dialog id="schema-dialog" class="glass-dialog" closedby="any" aria-labelledby="schema-dialog-title">
+  <!-- NATIVE MODAL: SCHEMA SPECIFICATION -->
+  <dialog id="schema-dialog" class="swiss-dialog" closedby="any" aria-labelledby="schema-dialog-title">
     <div class="dialog-header">
-      <h2 id="schema-dialog-title" data-i18n="schema_t">.pickplan.json v2 原生备份规范</h2>
-      <button type="button" class="dialog-close" command="close" commandfor="schema-dialog" aria-label="关闭窗口">✕</button>
+      <h2 id="schema-dialog-title" data-i18n="schema_t">.PICKPLAN.JSON V2 SPECIFICATION</h2>
+      <button type="button" class="dialog-close" command="close" commandfor="schema-dialog" aria-label="Close JSON schema dialog">✕</button>
     </div>
     <div class="dialog-body">
-      <p data-i18n="schema_p">iOS 与 iPadOS 原生 App 通过 LocalVaultStore 与 CryptoKit SHA256 将数据保存至本地及系统「文件」App（UIFileSharingEnabled），并 100% 向后兼容导入原 Android Pickplan v1 数组。</p>
+      <p data-i18n="schema_p">由 PickPlanCore.BackupCodec 在原生端编码并附带 CryptoKit SHA256 摘要，完全向后兼容原 Android Pickplan v1 数组导入。</p>
       <pre class="dialog-pre"><code>{
   "format": "pickplan-backup",
   "schemaVersion": 2,
-  "exportedAt": "2026-11-17T18:00:00Z",
-  "appVersion": "2.0.0-ios-liquid",
   "checksum": "&lt;sha256-of-canonical-payload&gt;",
   "payload": {
-    "todos": [{ "id": "...", "title": "...", "subtasks": [], "tag": "work", "priority": "high" }],
-    "aiSettings": { "providerName": "DeepSeek", "baseUrl": "...", "modelName": "deepseek-chat" },
-    "preferences": { "languageCode": "zh", "backupPolicy": { "isEnabled": true, "intervalHours": 24, "preferredHour": 22 } }
+    "todos": [{ "id": "...", "title": "...", "reminderTime": "..." }],
+    "aiSettings": { "providerName": "DeepSeek", "modelName": "deepseek-chat" },
+    "preferences": { "backupPolicy": { "intervalHours": 24, "preferredHour": 22 } }
   }
 }</code></pre>
     </div>
     <div class="dialog-footer">
-      <button type="button" class="btn-primary" command="close" commandfor="schema-dialog" autofocus data-i18n="dialog_close">关闭</button>
+      <button type="button" class="btn-solid" command="close" commandfor="schema-dialog" autofocus data-i18n="dialog_close">CLOSE [ESC]</button>
     </div>
   </dialog>
 </body>
